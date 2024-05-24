@@ -1,17 +1,27 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LostAndFoundBack.Models
 {
     public class Item
     {
-        [Required]
-        public int ItemId {  get; set; }
-        public string Description { get; set; }
-        [DataType(DataType.Date)]
-        public DateTime DateFound { get; set; }
-        public string LocationFound { get; set; }
-        public string Category { get; set; }
-        public string PhotoUrl { get; set; }
-        public string Title { get; set; }
+        [Key]
+        [Column("item_id")]
+        public int item_id { get; set; }
+
+        [Column("description")]
+        public string description { get; set; }
+
+        [Column("date_found")]
+        public DateTime date_found { get; set; }
+
+        [Column("location_found")]
+        public string location_found { get; set; }
+
+        [Column("category")]
+        public string category { get; set; }
+
+        [Column("photo_url")]
+        public string photo_url { get; set; }
     }
 }
