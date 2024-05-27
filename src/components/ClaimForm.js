@@ -1,11 +1,9 @@
-// ClaimForm.js
 import React from 'react';
-import './ClaimForm.css'; // Make sure to create this CSS file for styling
+import './ClaimForm.css'; 
 
 function ClaimForm() {
   return (
     <div className="form-container">
-      <h1>LOST AND FOUND</h1>
       <h2>Claiming Application</h2>
       <form>
         <div className="form-group">

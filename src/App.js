@@ -1,4 +1,3 @@
-// App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
@@ -14,7 +13,7 @@ function App() {
     <div className="App">
       <Router>
         <header className="App-header">
-          <h1>Lost and Found</h1>
+          <h1>SHERIDAN</h1>
           <nav>
             <a href="/">Home</a>
             <a href="/forms">Forms</a>
