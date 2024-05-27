@@ -6,6 +6,8 @@ import ChargerDetail from './components/ChargerDetail';
 import ClaimForm from './components/ClaimForm';
 import Signup from './components/Signup';
 import Login from './components/Login';
+import Contact from './components/Contact';
+import About from './components/About';
 import './App.css';
 
 function App() {
@@ -32,6 +34,8 @@ function App() {
           <Route path="/forms" element={<ClaimForm />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} /> 
         </Routes>
       </Router>
     </div>

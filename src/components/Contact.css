@@ -1,0 +1,15 @@
+.contact-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #5EA7E9;
+    color: white;
+  }
+  
+  .contact-container h1, .contact-container h2 {
+    margin-bottom: 20px;
+  }
+  
+  .contact-container p {
+    margin: 10px 0;
+  }
+  

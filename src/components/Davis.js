@@ -14,7 +14,7 @@ function Davis() {
   return (
     <div>
       <h1>LOST AND FOUND</h1>
-      <h2>Davis</h2>
+      <h2>Davis Campus</h2>
       <div className="items-container">
         {items.map((item, index) => (
           <div className="item" key={index}>
