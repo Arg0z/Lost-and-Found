@@ -7,10 +7,10 @@ namespace LostAndFoundBack.Models
     {
         [Required]
         public int ClaimId { get; set; }
-        [ForeignKey(nameof(UserId))]
         public int UserId { get; set; }
-        [ForeignKey(nameof(ItemId))]
+        public User user { get; set; }
         public int ItemId { get; set; }
+        public Item item { get; set; }
 
     }
 }

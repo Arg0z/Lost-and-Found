@@ -13,4 +13,19 @@ public class ApplicationDbContext : DbContext
     public DbSet<Claim> Claims { get; set; }
 
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Claim>()
+            .HasOne(c => c.item)
+            .WithMany(i => i.Claims)
+            .HasForeignKey(c => c.ItemId);
+
+        modelBuilder.Entity<Claim>()
+            .HasOne(c => c.user)
+            .WithMany(u => u.Claims)
+            .HasForeignKey(c => c.UserId);
+    }
+
 }

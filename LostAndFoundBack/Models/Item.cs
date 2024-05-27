@@ -13,5 +13,7 @@ namespace LostAndFoundBack.Models
         public string Category { get; set; }
         public string PhotoUrl { get; set; }
         public string Title { get; set; }
+
+        public ICollection<Claim> Claims { get; set; }
     }
 }
