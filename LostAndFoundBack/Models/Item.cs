@@ -23,5 +23,6 @@ namespace LostAndFoundBack.Models
 
         [Column("photo_url")]
         public string photo_url { get; set; }
+        public ICollection<Claim> Claims { get; set; }
     }
 }

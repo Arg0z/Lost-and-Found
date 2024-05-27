@@ -13,12 +13,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Claim> Claims { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Item>().HasKey(i => i.item_id); 
-        base.OnModelCreating(modelBuilder);
-    }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
+        modelBuilder.Entity<Item>().HasKey(i => i.item_id);
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Claim>()
