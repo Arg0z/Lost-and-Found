@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using LostAndFoundBack.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LostAndFoundBack.Controllers
 {
-    public class ItemsController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ItemsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
@@ -18,134 +18,81 @@ namespace LostAndFoundBack.Controllers
             _context = context;
         }
 
-        // GET: Items
-        public async Task<IActionResult> Index()
+        // GET: api/Items
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Item>>> GetItems()
         {
-            return View(await _context.Items.ToListAsync());
+            return await _context.Items.ToListAsync();
         }
 
-        // GET: Items/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/Items/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Item>> GetItem(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var item = await _context.Items
-                .FirstOrDefaultAsync(m => m.item_id == id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            return View(item);
-        }
-
-        // GET: Items/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Items/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("item_id,description,date_found,location_found,category,photo_url")] Item item)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(item);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(item);
-        }
-
-        // GET: Items/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var item = await _context.Items.FindAsync(id);
+
             if (item == null)
             {
                 return NotFound();
             }
-            return View(item);
+
+            return item;
         }
 
-        // POST: Items/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: api/Items
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("item_id,description,date_found,location_found,category,photo_url")] Item item)
+        public async Task<ActionResult<Item>> PostItem(Item item)
+        {
+            _context.Items.Add(item);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetItem), new { id = item.item_id }, item);
+        }
+
+        // PUT: api/Items/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutItem(int id, Item item)
         {
             if (id != item.item_id)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(item).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(item);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ItemExists(item.item_id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            return View(item);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ItemExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: Items/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // DELETE: api/Items/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteItem(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var item = await _context.Items
-                .FirstOrDefaultAsync(m => m.item_id == id);
+            var item = await _context.Items.FindAsync(id);
             if (item == null)
             {
                 return NotFound();
             }
 
-            return View(item);
-        }
-
-        // POST: Items/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var item = await _context.Items.FindAsync(id);
-            if (item != null)
-            {
-                _context.Items.Remove(item);
-            }
-
+            _context.Items.Remove(item);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return NoContent();
         }
 
         private bool ItemExists(int id)

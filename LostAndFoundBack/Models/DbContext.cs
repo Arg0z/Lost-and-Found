@@ -16,15 +16,6 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Item>().HasKey(i => i.item_id);
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Claim>()
-            .HasOne(c => c.item)
-            .WithMany(i => i.Claims)
-            .HasForeignKey(c => c.ItemId);
-
-        modelBuilder.Entity<Claim>()
-            .HasOne(c => c.user)
-            .WithMany(u => u.Claims)
-            .HasForeignKey(c => c.UserId);
     }
 
 }

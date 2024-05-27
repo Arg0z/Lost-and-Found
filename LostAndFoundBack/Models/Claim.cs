@@ -8,9 +8,7 @@ namespace LostAndFoundBack.Models
         [Required]
         public int ClaimId { get; set; }
         public int UserId { get; set; }
-        public User user { get; set; }
         public int ItemId { get; set; }
-        public Item item { get; set; }
 
     }
 }
