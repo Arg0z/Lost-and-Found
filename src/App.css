@@ -92,3 +92,34 @@ h2 {
 .item div {
   margin-top: 10px;
 }
+
+.detail-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.detail-image {
+  width: 200px;
+  height: auto;
+  margin: 20px 0;
+}
+
+.detail-container p {
+  font-size: 1.2em;
+  margin: 20px 0;
+}
+
+.detail-container button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.detail-container button:hover {
+  background-color: #0056b3;
+}
+

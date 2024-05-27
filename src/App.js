@@ -1,7 +1,12 @@
+// App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './Home';
-import Davis from './Davis';
+import Home from './components/Home';
+import Davis from './components/Davis';
+import ChargerDetail from './components/ChargerDetail';
+import ClaimForm from './components/ClaimForm';
+import Signup from './components/Signup';
+import Login from './components/Login';
 import './App.css';
 
 function App() {
@@ -24,6 +29,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/davis" element={<Davis />} />
+          <Route path="/chargers" element={<ChargerDetail />} />
+          <Route path="/forms" element={<ClaimForm />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </Router>
     </div>

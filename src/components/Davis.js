@@ -1,8 +1,10 @@
+// Davis.js
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Davis() {
   const items = [
-    { label: 'Chargers', count: 20 },
+    { label: 'Chargers', count: 21, link: '/chargers' },
     { label: 'Bottles', count: 5 },
     { label: 'Wallets', count: 3 },
     { label: 'Backpacks', count: 1 },
@@ -18,7 +20,9 @@ function Davis() {
         {items.map((item, index) => (
           <div className="item" key={index}>
             <div className="item-placeholder">{item.label[0]}</div>
-            <div>{item.label}</div>
+            <div>
+              <Link to={item.link || '#'}>{item.label}</Link>
+            </div>
             <div>{item.count}</div>
           </div>
         ))}
