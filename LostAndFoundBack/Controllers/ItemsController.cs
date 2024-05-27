@@ -1,156 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using LostAndFoundBack.Models;
+using LostAndFoundBack.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LostAndFoundBack.Controllers
 {
-    public class ItemsController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ItemsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IItemRepository _itemRepository;
 
-        public ItemsController(ApplicationDbContext context)
+        public ItemsController(IItemRepository itemRepository)
         {
-            _context = context;
+            _itemRepository = itemRepository;
         }
 
-        // GET: Items
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<ActionResult<List<Item>>> GetItems()
         {
-            return View(await _context.Items.ToListAsync());
+            var items = await _itemRepository.GetAllItemsAsync();
+            return Ok(items);
         }
 
-        // GET: Items/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Item>> GetItem(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var item = await _context.Items
-                .FirstOrDefaultAsync(m => m.ItemId == id);
+            var item = await _itemRepository.GetItemByIdAsync(id);
             if (item == null)
             {
                 return NotFound();
             }
-
-            return View(item);
+            return Ok(item);
         }
 
-        // GET: Items/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Items/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ItemId,Description,DateFound,LocationFound,Category,PhotoUrl,Title")] Item item)
+        public async Task<ActionResult> AddItem([FromBody] Item item)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(item);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(item);
+            await _itemRepository.AddItemAsync(item);
+            return CreatedAtAction(nameof(GetItem), new { id = item.item_id }, item);
         }
 
-        // GET: Items/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateItem(int id, [FromBody] Item item)
         {
-            if (id == null)
+            if (id != item.item_id)
             {
-                return NotFound();
+                return BadRequest();
             }
-
-            var item = await _context.Items.FindAsync(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return View(item);
+            await _itemRepository.UpdateItemAsync(item);
+            return NoContent();
         }
 
-        // POST: Items/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ItemId,Description,DateFound,LocationFound,Category,PhotoUrl,Title")] Item item)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteItem(int id)
         {
-            if (id != item.ItemId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(item);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ItemExists(item.ItemId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(item);
-        }
-
-        // GET: Items/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var item = await _context.Items
-                .FirstOrDefaultAsync(m => m.ItemId == id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            return View(item);
-        }
-
-        // POST: Items/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var item = await _context.Items.FindAsync(id);
-            if (item != null)
-            {
-                _context.Items.Remove(item);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool ItemExists(int id)
-        {
-            return _context.Items.Any(e => e.ItemId == id);
+            await _itemRepository.DeleteItemAsync(id);
+            return NoContent();
         }
     }
 }
