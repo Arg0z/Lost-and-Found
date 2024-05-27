@@ -1,0 +1,49 @@
+.campus-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #f0f0f0;
+    color: #333;
+  }
+  
+  .items-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  
+  .item {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    width: 150px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .item-placeholder {
+    font-size: 2em;
+    margin-bottom: 10px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+  }
+  
+  .item a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .item a:hover {
+    text-decoration: underline;
+  }
+  
