@@ -1,16 +1,16 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import chargerImage from './chargers.png';
+import walletImage from './wallets.png';
 
-function ChargerDetail() {
+function WalletDetail() {
   const { campusName } = useParams();
 
   return (
     <div className="detail-container">
-      <h2>Chargers</h2>
-      <img src={chargerImage} alt="Charger" className="detail-image" />
+      <h2>Wallets</h2>
+      <img src={walletImage} alt="Wallet" className="detail-image" />
       <p>
-        We currently have found 32 chargers in {campusName} Campus. If you think that we have your charger,
+        We currently have found 32 wallets in {campusName} Campus. If you think that we have your charger,
         please, <a href="/contact">call us</a>, or <a href="/forms">apply online</a>.
       </p>
       <button onClick={() => window.location.href = '/contact'}>Call</button>
@@ -19,4 +19,4 @@ function ChargerDetail() {
   );
 }
 
-export default ChargerDetail;
+export default WalletDetail;

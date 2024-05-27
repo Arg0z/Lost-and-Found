@@ -20,8 +20,9 @@ function Login() {
 
   return (
     <div className="login-container">
+      <h1>Lost and Found</h1>
       <div className="login-form">
-        <h2>Register</h2>
+        <h2>Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
