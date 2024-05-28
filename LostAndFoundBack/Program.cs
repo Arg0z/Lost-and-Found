@@ -3,8 +3,7 @@ using LostAndFoundBack.Repositories;
 using LostAndFoundBack.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-
- var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -17,6 +16,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 
+// Correct place to configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontendApp",
+        policy => policy.WithOrigins("http://localhost:3000") // React's URL
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,6 +35,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowFrontendApp"); // Ensure CORS is used before UseRouting/UseAuthentication/UseAuthorization
 app.UseAuthorization();
+
 app.MapControllers();
 app.Run();

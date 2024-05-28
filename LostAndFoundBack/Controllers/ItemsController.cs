@@ -95,6 +95,22 @@ namespace LostAndFoundBack.Controllers
             return NoContent();
         }
 
+        // GET: api/Items/location
+        [HttpGet("location/{location}")]
+        public async Task<ActionResult<IEnumerable<Item>>> GetItemsByLocation(string location)
+        {
+            var items = await _context.Items
+                                      .Where(item => item.location_found.Equals(location))
+                                      .ToListAsync();
+            if (items == null || items.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return items;
+        }
+
+
         private bool ItemExists(int id)
         {
             return _context.Items.Any(e => e.item_id == id);
