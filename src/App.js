@@ -8,6 +8,7 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import Contact from './components/Contact';
 import About from './components/About';
+import AdminSearch from './components/AdminSearch';
 import './App.css';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
             <a href="/forms">Forms</a>
             <a href="/about">About</a>
             <a href="/contact">Contact</a>
+            <a href="/admin-search">Admin Search</a>
             <div className="auth-links">
               <a href="/login">Login</a>
               <a href="/signup">Sign Up</a>
@@ -35,7 +37,8 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/about" element={<About />} /> 
+          <Route path="/about" element={<About />} />
+          <Route path="/admin-search" element={<AdminSearch />} />
         </Routes>
       </Router>
     </div>
