@@ -110,7 +110,36 @@ namespace LostAndFoundBack.Controllers
             return items;
         }
 
+        [HttpGet("categories/json")]
+        public async Task<IActionResult> GetCategoriesWithCountsAsJson()
+        {
+            var categoryCounts = await _context.Items
+                .GroupBy(i => i.category)
+                .Select(g => new
+                {
+                    Category = g.Key,
+                    Count = g.Count()
+                })
+                .ToListAsync();
 
+            return new JsonResult(categoryCounts);
+        }
+
+
+        [HttpGet("category/{categoryName}")]
+        public async Task<IActionResult> GetItemCountByCategory(string categoryName)
+        {
+            if (string.IsNullOrWhiteSpace(categoryName))
+            {
+                return BadRequest("Category name cannot be null or empty.");
+            }
+
+            var itemCount = await _context.Items
+                .Where(i => i.category == categoryName)
+                .CountAsync();
+
+            return Ok(new { Category = categoryName, Count = itemCount });
+        }
         private bool ItemExists(int id)
         {
             return _context.Items.Any(e => e.item_id == id);
