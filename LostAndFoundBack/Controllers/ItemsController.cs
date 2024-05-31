@@ -125,6 +125,33 @@ namespace LostAndFoundBack.Controllers
             return new JsonResult(categoryCounts);
         }
 
+        // GET: api/Items/location/{location}/count-by-category
+        [HttpGet("location/{location}/count-by-category")]
+        public async Task<ActionResult<IEnumerable<CategoryCountDto>>> GetItemsCountByCategory(string location)
+        {
+            var itemsCountByCategory = await _context.Items
+                .Where(item => item.location_found.Equals(location))
+                .GroupBy(item => item.category)
+                .Select(group => new CategoryCountDto
+                {
+                    Category = group.Key,
+                    Count = group.Count()
+                })
+                .ToListAsync();
+
+            if (itemsCountByCategory == null || itemsCountByCategory.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return itemsCountByCategory;
+        }
+
+        public class CategoryCountDto
+        {
+            public string Category { get; set; }
+            public int Count { get; set; }
+        }
 
         [HttpGet("category/{categoryName}")]
         public async Task<IActionResult> GetItemCountByCategory(string categoryName)
