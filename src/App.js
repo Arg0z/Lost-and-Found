@@ -9,6 +9,7 @@ import Login from './components/Login';
 import Contact from './components/Contact';
 import About from './components/About';
 import AdminSearch from './components/AdminSearch';
+import AddAdmin from './components/AddAdmin';
 import './App.css';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
             <a href="/about">About</a>
             <a href="/contact">Contact</a>
             <a href="/admin-search">Admin Search</a>
+            <a href="/add-admin">Add Admin</a>
             <div className="auth-links">
               <a href="/login">Login</a>
               <a href="/signup">Sign Up</a>
@@ -39,6 +41,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/admin-search" element={<AdminSearch />} />
+          <Route path="/add-admin" element={<AddAdmin />} />
         </Routes>
       </Router>
     </div>
