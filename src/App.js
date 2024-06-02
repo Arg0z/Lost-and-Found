@@ -10,6 +10,7 @@ import Contact from './components/Contact';
 import About from './components/About';
 import AdminSearch from './components/AdminSearch';
 import AddAdmin from './components/AddAdmin';
+import ManageInventory from './components/ManageInventory';
 import './App.css';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
             <a href="/contact">Contact</a>
             <a href="/admin-search">Admin Search</a>
             <a href="/add-admin">Add Admin</a>
+            <a href="/manage-inventory">Manage Inventory</a>
             <div className="auth-links">
               <a href="/login">Login</a>
               <a href="/signup">Sign Up</a>
@@ -42,6 +44,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/admin-search" element={<AdminSearch />} />
           <Route path="/add-admin" element={<AddAdmin />} />
+          <Route path="/manage-inventory" element={<ManageInventory />} />
         </Routes>
       </Router>
     </div>
