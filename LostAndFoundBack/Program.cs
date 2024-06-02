@@ -1,6 +1,7 @@
 using LostAndFoundBack.Models;
 using LostAndFoundBack.Repositories;
 using LostAndFoundBack.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
+    .AddCookie(); // Specify the authentication scheme and add Cookie authentication
+builder.Services.AddIdentityCore<User>().
+    AddEntityFrameworkStores<ApplicationDbContext>().
+    AddApiEndpoints();
 
 // Configure DbContext with SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -22,7 +30,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontendApp",
         policy => policy.WithOrigins("http://localhost:3000") // React's URL
                         .AllowAnyMethod()
-                        .AllowAnyHeader());
+                        .AllowAnyHeader()
+                        .AllowCredentials()); // Allow credentials for cookie authentication
 });
 
 var app = builder.Build();
@@ -36,7 +45,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontendApp"); // Ensure CORS is used before UseRouting/UseAuthentication/UseAuthorization
+app.UseAuthentication(); // Use authentication before authorization
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapIdentityApi<User>(); // This is not a standard method, you may need to define it
 app.Run();
