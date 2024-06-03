@@ -16,7 +16,6 @@ function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here
     console.log('Form submitted:', formData);
   };
 
@@ -76,6 +75,7 @@ function Signup() {
           </div>
           <button type="submit" className="signup-button">Sign Up</button>
         </form>
+        <p>Already have an account? <a href="/login">Login</a></p>
       </div>
     </div>
   );

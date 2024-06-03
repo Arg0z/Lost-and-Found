@@ -15,18 +15,18 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
-  .form-group {
+  .item-form .form-group {
     margin-bottom: 15px;
   }
   
-  label {
+  .item-form label {
     display: block;
     margin-bottom: 5px;
   }
   
-  select,
-  input[type="date"],
-  textarea {
+  .item-form select,
+  .item-form input[type="date"],
+  .item-form textarea {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;
@@ -34,7 +34,7 @@
     border-radius: 4px;
   }
   
-  .submit-button {
+  .item-form .submit-button {
     background-color: #007bff;
     color: white;
     border: none;
@@ -44,9 +44,10 @@
     display: block;
     width: 100%;
     margin-top: 10px;
+    transition: background-color 0.3s ease;
   }
   
-  .submit-button:hover {
+  .item-form .submit-button:hover {
     background-color: #0056b3;
   }
   
@@ -54,7 +55,7 @@
     margin-top: 20px;
   }
   
-  .item {
+  .items-list .item {
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -63,8 +64,8 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
-  .edit-button,
-  .remove-button {
+  .items-list .edit-button,
+  .items-list .remove-button {
     background-color: #007bff;
     color: white;
     border: none;
@@ -72,10 +73,10 @@
     cursor: pointer;
     border-radius: 5px;
     margin-right: 5px;
+    transition: background-color 0.3s ease;
   }
   
-  .edit-button:hover,
-  .remove-button:hover {
+  .items-list .edit-button:hover,
+  .items-list .remove-button:hover {
     background-color: #0056b3;
   }
-  

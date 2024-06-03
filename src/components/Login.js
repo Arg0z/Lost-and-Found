@@ -5,7 +5,6 @@ function Login() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-
   });
 
   const handleChange = (e) => {
@@ -50,6 +49,8 @@ function Login() {
           </div>
           <button type="submit" className="login-button">Login</button>
         </form>
+        <p>Don't have an account? <a href="/signup">Sign Up</a></p>
+        <p>Forgot your password? <a href="/forgot-password">Reset Password</a></p>
       </div>
     </div>
   );
