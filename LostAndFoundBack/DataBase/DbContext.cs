@@ -1,5 +1,5 @@
-﻿namespace LostAndFoundBack.Models;
-
+﻿namespace LostAndFoundBack.DataBase;
+using LostAndFoundBack.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
