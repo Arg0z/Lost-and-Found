@@ -18,8 +18,7 @@ builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
 
 builder.Services.AddIdentity<User, IdentityRole>() // Use AddIdentity to include roles
     .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddApiEndpoints()
-    .AddDefaultTokenProviders();
+    .AddApiEndpoints();
 
 // Configure DbContext with SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -60,5 +59,5 @@ app.UseAuthentication(); // Use authentication before authorization
 app.UseAuthorization();
 
 app.MapControllers();
-// app.MapIdentityApi<User>(); // This is not a standard method, you may need to define it
+app.MapIdentityApi<User>();
 app.Run();
