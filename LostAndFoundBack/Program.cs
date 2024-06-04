@@ -1,6 +1,7 @@
 using LostAndFoundBack.Models;
 using LostAndFoundBack.Repositories;
 using LostAndFoundBack.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,9 +15,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+// Add Scoped Services
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 
-// Correct place to configure CORS
+// Configure CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendApp",
@@ -36,7 +39,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontendApp"); // Ensure CORS is used before UseRouting/UseAuthentication/UseAuthorization
+app.UseRouting();
+app.UseAuthentication(); // Add Authentication middleware
 app.UseAuthorization();
 
 app.MapControllers();
+
 app.Run();
