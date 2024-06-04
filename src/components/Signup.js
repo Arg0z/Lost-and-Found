@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import './Signup.css'; 
+import axios from 'axios';
+import './Signup.css';
 
 function Signup() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    firstName: '',
-    lastName: '',
+    userName: '',
   });
 
   const handleChange = (e) => {
@@ -14,9 +14,18 @@ function Signup() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    try {
+      const response = await axios.post('https://localhost:7224/api/auth/register', formData);
+      if (response.status === 200) {
+        console.log('Registration successful');
+      } else {
+        console.log('Registration failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -26,12 +35,24 @@ function Signup() {
         <h2>Register</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
+            <label htmlFor="userName">Username</label>
+            <input
+              type="text"
+              id="userName"
+              name="userName"
+              placeholder="Enter your username"
+              value={formData.userName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
               type="email"
               id="email"
               name="email"
-              placeholder="Enter your Sheridan email address"
+              placeholder="Enter your email address"
               value={formData.email}
               onChange={handleChange}
               required
@@ -45,30 +66,6 @@ function Signup() {
               name="password"
               placeholder="Enter your password"
               value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="firstName">First Name</label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              placeholder="Enter your first name"
-              value={formData.firstName}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="lastName">Last Name</label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              placeholder="Enter your last name"
-              value={formData.lastName}
               onChange={handleChange}
               required
             />

@@ -1,14 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './ManageInventory.css';
 
-const initialItems = [
-  { id: 1, campus: 'Davis', type: 'Chargers', description: 'Black charger', dateLost: '2024-05-01' },
-  { id: 2, campus: 'HMC', type: 'Bottles', description: 'Blue water bottle', dateLost: '2024-05-02' },
-  { id: 3, campus: 'Trafalgar', type: 'Wallets', description: 'Brown leather wallet', dateLost: '2024-05-03' },
-];
-
 function ManageInventory() {
-  const [items, setItems] = useState(initialItems);
+  const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState({
     campus: '',
     type: '',
@@ -17,15 +12,33 @@ function ManageInventory() {
   });
   const [editingItem, setEditingItem] = useState(null);
 
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
+  const fetchItems = async () => {
+    try {
+      const response = await axios.get('https://localhost:7224/api/items');
+      setItems(response.data);
+    } catch (error) {
+      console.error('Error fetching items:', error);
+    }
+  };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setNewItem({ ...newItem, [name]: value });
   };
 
-  const handleAddItem = (event) => {
+  const handleAddItem = async (event) => {
     event.preventDefault();
-    setItems([...items, { ...newItem, id: items.length + 1 }]);
-    setNewItem({ campus: '', type: '', description: '', dateLost: '' });
+    try {
+      await axios.post('https://localhost:7224/api/items', newItem);
+      fetchItems(); // Refresh the item list after adding a new item
+      setNewItem({ campus: '', type: '', description: '', dateLost: '' });
+    } catch (error) {
+      console.error('Error adding item:', error);
+    }
   };
 
   const handleEditItem = (id) => {
@@ -34,15 +47,25 @@ function ManageInventory() {
     setNewItem(item);
   };
 
-  const handleSaveEdit = (event) => {
+  const handleSaveEdit = async (event) => {
     event.preventDefault();
-    setItems(items.map(item => (item.id === editingItem.id ? newItem : item)));
-    setEditingItem(null);
-    setNewItem({ campus: '', type: '', description: '', dateLost: '' });
+    try {
+      await axios.put(`https://localhost:7224/api/items/${editingItem.id}`, newItem);
+      fetchItems(); // Refresh the item list after editing an item
+      setEditingItem(null);
+      setNewItem({ campus: '', type: '', description: '', dateLost: '' });
+    } catch (error) {
+      console.error('Error saving item:', error);
+    }
   };
 
-  const handleRemoveItem = (id) => {
-    setItems(items.filter(item => item.id !== id));
+  const handleRemoveItem = async (id) => {
+    try {
+      await axios.delete(`https://localhost:7224/api/items/${id}`);
+      fetchItems(); // Refresh the item list after deleting an item
+    } catch (error) {
+      console.error('Error removing item:', error);
+    }
   };
 
   return (

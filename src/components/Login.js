@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import './Login.css'; 
+import axios from 'axios';
+import './Login.css';
 
 function Login() {
   const [formData, setFormData] = useState({
-    email: '',
+    userName: '',
     password: '',
   });
 
@@ -12,9 +13,19 @@ function Login() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    try {
+      const response = await axios.post('https://localhost:7224/api/auth/login', formData);
+      if (response.status === 200) {
+        console.log('Login successful');
+        // Redirect to home page or set user in state
+      } else {
+        console.log('Login failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -24,13 +35,13 @@ function Login() {
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="userName">Username</label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Enter your Sheridan email address"
-              value={formData.email}
+              type="text"
+              id="userName"
+              name="userName"
+              placeholder="Enter your username"
+              value={formData.userName}
               onChange={handleChange}
               required
             />
