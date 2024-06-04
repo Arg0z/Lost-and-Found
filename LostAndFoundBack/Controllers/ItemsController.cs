@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using LostAndFoundBack.DataBase;
-using LostAndFoundBack.Models;
+﻿using LostAndFoundBack.Models;
+using LostAndFoundBack.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LostAndFoundBack.Controllers
 {
@@ -13,17 +13,20 @@ namespace LostAndFoundBack.Controllers
     public class ItemsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IItemRepository _itemRepository;
 
-        public ItemsController(ApplicationDbContext context)
+        public ItemsController(ApplicationDbContext context, IItemRepository itemRepository)
         {
             _context = context;
+            _itemRepository = itemRepository;
         }
 
         // GET: api/Items
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Item>>> GetItems()
         {
-            return await _context.Items.ToListAsync();
+            var items = await _itemRepository.GetAllItemsAsync();
+            return Ok(items);
         }
 
         // GET: api/Items/5
@@ -168,6 +171,7 @@ namespace LostAndFoundBack.Controllers
 
             return Ok(new { Category = categoryName, Count = itemCount });
         }
+
         private bool ItemExists(int id)
         {
             return _context.Items.Any(e => e.item_id == id);

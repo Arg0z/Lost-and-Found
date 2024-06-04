@@ -16,7 +16,7 @@ namespace LostAndFoundBack.Repositories
             _context = context;
         }
 
-        public async Task<List<Item>> GetAllItemsAsync()
+        public async Task<IEnumerable<Item>> GetAllItemsAsync()
         {
             return await _context.Items.ToListAsync();
         }
