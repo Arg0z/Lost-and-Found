@@ -1,4 +1,5 @@
 ﻿using LostAndFoundBack.Models;
+using LostAndFoundBack.DataBase;
 using LostAndFoundBack.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

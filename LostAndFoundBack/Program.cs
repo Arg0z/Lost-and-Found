@@ -1,8 +1,11 @@
 using LostAndFoundBack.DataBase;
 using LostAndFoundBack.Models;
 using LostAndFoundBack.Repositories.Interfaces;
+using LostAndFoundBack.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,22 +15,22 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthorization();
-builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
-    .AddCookie(); // Specify the authentication scheme and add Cookie authentication
+
+builder.Services.AddAuthentication()
+    .AddCookie();
 
 builder.Services.AddIdentity<User, IdentityRole>() // Use AddIdentity to include roles
     .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddApiEndpoints();
+    .AddApiEndpoints()
+    .AddDefaultTokenProviders();
 
 // Configure DbContext with SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-// Add Scoped Services
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 
-// Configure CORS
+// Correct place to configure CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendApp",
@@ -56,10 +59,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontendApp"); // Ensure CORS is used before UseRouting/UseAuthentication/UseAuthorization
-app.UseRouting();
-app.UseAuthentication(); // Add Authentication middleware
+app.UseAuthentication(); // Use authentication before authorization
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapIdentityApi<User>();
 app.Run();
