@@ -15,15 +15,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthorization();
-
 builder.Services.AddAuthentication()
-    .AddCookie();
+    .AddCookie()
+    .AddBearerToken(IdentityConstants.BearerScheme); // Specify the authentication scheme and add Cookie authentication
 
-builder.Services.AddIdentity<User, IdentityRole>() // Use AddIdentity to include roles
+builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddApiEndpoints()
-    .AddDefaultTokenProviders();
-
+    .AddDefaultTokenProviders()
+    .AddApiEndpoints();
 // Configure DbContext with SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -56,12 +55,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.MapIdentityApi<User>();
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontendApp"); // Ensure CORS is used before UseRouting/UseAuthentication/UseAuthorization
-app.UseAuthentication(); // Use authentication before authorization
-app.UseAuthorization();
-
+app.UseAuthentication();
 app.MapControllers();
-app.MapIdentityApi<User>();
+
 app.Run();
