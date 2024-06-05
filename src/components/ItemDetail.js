@@ -1,39 +1,62 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import chargerImage from './chargers.png';
-import bottleImage from './bottles.png';
-import walletImage from './wallets.png';
-import backpackImage from './backpacks.png';
-import hatImage from './hats.png';
-import glovesImage from './gloves.png';
-
-const itemData = {
-  chargers: { label: 'Chargers', image: chargerImage, description: 'We currently have found 32 chargers.' },
-  bottles: { label: 'Bottles', image: bottleImage, description: 'We currently have found 5 bottles.' },
-  wallets: { label: 'Wallets', image: walletImage, description: 'We currently have found 3 wallets.' },
-  backpacks: { label: 'Backpacks', image: backpackImage, description: 'We currently have found 1 backpack.' },
-  hats: { label: 'Hats', image: hatImage, description: 'We currently have found 4 hats.' },
-  gloves: { label: 'Gloves', image: glovesImage, description: 'We currently have found 6 gloves.' }
-};
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import './ItemDetail.css';
 
 function ItemDetail() {
-  const { campusName, itemType } = useParams();
-  const item = itemData[itemType];
+  const { campusName, categoryName } = useParams();
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (!item) {
-    return <div>Item not found</div>;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`https://localhost:7224/api/items/location/${campusName}/category/${categoryName}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch item details');
+        }
+        const data = await response.json();
+        setItems(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Failed to fetch data', error);
+        setError(error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [campusName, categoryName]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  if (!items.length) {
+    return <div>No items found for this category</div>;
   }
 
   return (
-    <div className="detail-container">
-      <h2>{item.label}</h2>
-      <img src={item.image} alt={item.label} className="detail-image" />
-      <p>
-        {item.description} If you think that we have your {item.label.toLowerCase()},
-        please, <a href="/contact">call us</a>, or <a href="/forms">apply online</a>.
-      </p>
-      <button onClick={() => window.location.href = '/contact'}>Call</button>
-      <button onClick={() => window.location.href = '/forms'}>Online</button>
+    <div className="item-detail-container">
+      <h1>LOST AND FOUND</h1>
+      <h2>{categoryName} in {campusName} Campus</h2>
+      <div className="items-container">
+        {items.map(item => (
+          <div key={item.item_id} className="item-detail">
+            <div><strong>Category:</strong> {item.category}</div>
+            <div><strong>Description:</strong> {item.description}</div>
+            <div><strong>Location Found:</strong> {item.location_found}</div>
+            <div><strong>Date Found:</strong> {new Date(item.date_found).toLocaleDateString()}</div>
+          </div>
+        ))}
+      </div>
+      <div className="contact-message">
+        If you think we have your charger, please <a href="tel:your-phone-number">call us</a>, or <Link to="/forms">apply online</Link>.
+      </div>
     </div>
   );
 }

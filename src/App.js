@@ -50,7 +50,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/campus/:campusName" element={<Campus />} />
-            <Route path="/campus/:campusName/:itemType" element={<ItemDetail />} />
+            <Route path="/campus/:campusName/:categoryName" element={<ItemDetail />} />
             <Route path="/forms" element={<ClaimForm />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />

@@ -1,0 +1,47 @@
+.item-detail-container {
+    padding: 20px;
+  }
+  
+  .items-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .item-detail {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    width: 300px;
+  }
+  
+  .item-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .item-detail div {
+    margin-top: 10px;
+  }
+  
+  .item-detail-container {
+    padding: 20px;
+  }
+  
+  .items-container {
+    margin-top: 20px;
+  }
+  
+  .item-detail {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .contact-message {
+    margin-top: 20px;
+    font-size: 16px;
+  }
+  

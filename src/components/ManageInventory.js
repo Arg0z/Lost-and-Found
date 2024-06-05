@@ -5,10 +5,11 @@ import './ManageInventory.css';
 function ManageInventory() {
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState({
-    campus: '',
-    type: '',
     description: '',
-    dateLost: '',
+    date_found: '',
+    location_found: '',
+    category: '',
+    photo_url: ''
   });
   const [editingItem, setEditingItem] = useState(null);
 
@@ -34,15 +35,15 @@ function ManageInventory() {
     event.preventDefault();
     try {
       await axios.post('https://localhost:7224/api/items', newItem);
-      fetchItems(); // Refresh the item list after adding a new item
-      setNewItem({ campus: '', type: '', description: '', dateLost: '' });
+      fetchItems(); 
+      setNewItem({ description: '', date_found: '', location_found: '', category: '', photo_url: '' });
     } catch (error) {
       console.error('Error adding item:', error);
     }
   };
 
   const handleEditItem = (id) => {
-    const item = items.find(item => item.id === id);
+    const item = items.find(item => item.item_id === id);
     setEditingItem(item);
     setNewItem(item);
   };
@@ -50,10 +51,10 @@ function ManageInventory() {
   const handleSaveEdit = async (event) => {
     event.preventDefault();
     try {
-      await axios.put(`https://localhost:7224/api/items/${editingItem.id}`, newItem);
-      fetchItems(); // Refresh the item list after editing an item
+      await axios.put(`https://localhost:7224/api/items/${editingItem.item_id}`, newItem);
+      fetchItems(); 
       setEditingItem(null);
-      setNewItem({ campus: '', type: '', description: '', dateLost: '' });
+      setNewItem({ description: '', date_found: '', location_found: '', category: '', photo_url: '' });
     } catch (error) {
       console.error('Error saving item:', error);
     }
@@ -73,8 +74,8 @@ function ManageInventory() {
       <h2>Manage Inventory</h2>
       <form onSubmit={editingItem ? handleSaveEdit : handleAddItem} className="item-form">
         <div className="form-group">
-          <label htmlFor="campus">Campus</label>
-          <select id="campus" name="campus" value={newItem.campus} onChange={handleChange} required>
+          <label htmlFor="location_found">Campus</label>
+          <select id="location_found" name="location_found" value={newItem.location_found} onChange={handleChange} required>
             <option value="">Select Campus</option>
             <option value="Davis">Davis</option>
             <option value="HMC">HMC</option>
@@ -82,8 +83,8 @@ function ManageInventory() {
           </select>
         </div>
         <div className="form-group">
-          <label htmlFor="type">Item Type</label>
-          <select id="type" name="type" value={newItem.type} onChange={handleChange} required>
+          <label htmlFor="category">Item Type</label>
+          <select id="category" name="category" value={newItem.category} onChange={handleChange} required>
             <option value="">Select Type</option>
             <option value="Chargers">Chargers</option>
             <option value="Bottles">Bottles</option>
@@ -105,12 +106,12 @@ function ManageInventory() {
           ></textarea>
         </div>
         <div className="form-group">
-          <label htmlFor="dateLost">Date Lost</label>
+          <label htmlFor="date_found">Date Lost</label>
           <input
             type="date"
-            id="dateLost"
-            name="dateLost"
-            value={newItem.dateLost}
+            id="date_found"
+            name="date_found"
+            value={newItem.date_found}
             onChange={handleChange}
             required
           />
@@ -119,13 +120,13 @@ function ManageInventory() {
       </form>
       <div className="items-list">
         {items.map(item => (
-          <div key={item.id} className="item">
-            <div><strong>Campus:</strong> {item.campus}</div>
-            <div><strong>Type:</strong> {item.type}</div>
+          <div key={item.item_id} className="item">
+            <div><strong>Campus:</strong> {item.location_found}</div>
+            <div><strong>Type:</strong> {item.category}</div>
             <div><strong>Description:</strong> {item.description}</div>
-            <div><strong>Date Lost:</strong> {item.dateLost}</div>
-            <button onClick={() => handleEditItem(item.id)} className="edit-button">Edit</button>
-            <button onClick={() => handleRemoveItem(item.id)} className="remove-button">Remove</button>
+            <div><strong>Date Lost:</strong> {new Date(item.date_found).toLocaleDateString()}</div>
+            <button onClick={() => handleEditItem(item.item_id)} className="edit-button">Edit</button>
+            <button onClick={() => handleRemoveItem(item.item_id)} className="remove-button">Remove</button>
           </div>
         ))}
       </div>
