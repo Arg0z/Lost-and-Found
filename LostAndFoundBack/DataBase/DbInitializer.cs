@@ -1,5 +1,7 @@
 ﻿using LostAndFoundBack.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LostAndFoundBack.DataBase
 {
