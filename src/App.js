@@ -1,3 +1,5 @@
+// src/App.js
+
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Home from './components/Home';
@@ -12,14 +14,15 @@ import AdminSearch from './components/AdminSearch';
 import AddAdmin from './components/AddAdmin';
 import ManageInventory from './components/ManageInventory';
 import ForgotPassword from './components/ForgotPassword';
-
 import './App.css';
 
 function App() {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('accessToken'));
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    setIsAuthenticated(false);
   };
 
   return (
@@ -32,17 +35,25 @@ function App() {
             <Link to="/forms">Forms</Link>
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
-            <div className="dropdown">
-              <button className="dropbtn" onClick={toggleDropdown}>Admin</button>
-              <div className={`dropdown-content ${isDropdownOpen ? 'show' : ''}`}>
-                <Link to="/admin-search">Admin Search</Link>
-                <Link to="/add-admin">Add Admin</Link>
-                <Link to="/manage-inventory">Manage Inventory</Link>
+            {isAuthenticated && (
+              <div className="dropdown">
+                <button className="dropbtn">Admin</button>
+                <div className="dropdown-content">
+                  <Link to="/admin-search">Admin Search</Link>
+                  <Link to="/add-admin">Add Admin</Link>
+                  <Link to="/manage-inventory">Manage Inventory</Link>
+                </div>
               </div>
-            </div>
+            )}
             <div className="auth-links">
-              <Link to="/login">Login</Link>
-              <Link to="/signup">Sign Up</Link>
+              {!isAuthenticated ? (
+                <>
+                  <Link to="/login">Login</Link>
+                  <Link to="/signup">Sign Up</Link>
+                </>
+              ) : (
+                <button onClick={handleLogout}>Logout</button>
+              )}
             </div>
           </nav>
         </header>
@@ -53,12 +64,13 @@ function App() {
             <Route path="/campus/:campusName/:categoryName" element={<ItemDetail />} />
             <Route path="/forms" element={<ClaimForm />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
             <Route path="/admin-search" element={<AdminSearch />} />
             <Route path="/add-admin" element={<AddAdmin />} />
             <Route path="/manage-inventory" element={<ManageInventory />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
           </Routes>
         </div>
       </Router>

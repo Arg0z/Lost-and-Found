@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import api from '../api';
 import './Signup.css';
 
 function Signup() {
+  const navigate = useNavigate(); 
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -17,9 +19,10 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://localhost:7224/api/auth/register', formData);
+      const response = await api.post('/register', formData);
       if (response.status === 200) {
         console.log('Registration successful');
+        navigate('/login'); 
       } else {
         console.log('Registration failed');
       }

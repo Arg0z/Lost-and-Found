@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import api from '../api';
 import './Login.css';
 
-function Login() {
+function Login({ setIsAuthenticated }) { 
+  const navigate = useNavigate(); 
   const [formData, setFormData] = useState({
-    userName: '',
+    email: '',
     password: '',
   });
 
@@ -16,10 +18,14 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://localhost:7224/api/auth/login', formData);
+      const response = await api.post('/login', formData);
       if (response.status === 200) {
         console.log('Login successful');
-        // Redirect to home page or set user in state
+        const { accessToken, refreshToken } = response.data;
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        setIsAuthenticated(true); 
+        navigate('/'); 
       } else {
         console.log('Login failed');
       }
@@ -35,13 +41,13 @@ function Login() {
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="userName">Username</label>
+            <label htmlFor="email">Email</label>
             <input
-              type="text"
-              id="userName"
-              name="userName"
-              placeholder="Enter your username"
-              value={formData.userName}
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email"
+              value={formData.email}
               onChange={handleChange}
               required
             />
