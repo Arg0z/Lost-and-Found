@@ -67,6 +67,7 @@ namespace LostAndFoundBack.Controllers
         {
             try
             {
+                item.Status = Status.Unclaimed;
                 _context.Items.Add(item);
                 await _context.SaveChangesAsync();
                 return CreatedAtAction(nameof(GetItem), new { id = item.item_id }, item);
