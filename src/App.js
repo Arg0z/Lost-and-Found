@@ -37,7 +37,7 @@ function App() {
             <Link to="/forms">Forms</Link>
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
-             (
+            
               <div className="dropdown">
                 <button className="dropbtn">Admin</button>
                 <div className="dropdown-content">
@@ -48,16 +48,15 @@ function App() {
                   <Link to="/view-claims">View Claims</Link>
                 </div>
               </div>
-            )
             <div className="auth-links">
-              {!isAuthenticated ? (
+              
                 <>
                   <Link to="/login">Login</Link>
                   <Link to="/signup">Sign Up</Link>
                 </>
-              ) : (
+            
                 <button onClick={handleLogout}>Logout</button>
-              )}
+
             </div>
           </nav>
         </header>
