@@ -14,6 +14,8 @@ import AdminSearch from './components/AdminSearch';
 import AddAdmin from './components/AddAdmin';
 import ManageInventory from './components/ManageInventory';
 import ForgotPassword from './components/ForgotPassword';
+import AddItem from './components/AddItem';
+import ViewClaims from './components/ViewClaims';
 import './App.css';
 
 function App() {
@@ -35,16 +37,18 @@ function App() {
             <Link to="/forms">Forms</Link>
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
-            {isAuthenticated && (
+             (
               <div className="dropdown">
                 <button className="dropbtn">Admin</button>
                 <div className="dropdown-content">
                   <Link to="/admin-search">Admin Search</Link>
                   <Link to="/add-admin">Add Admin</Link>
                   <Link to="/manage-inventory">Manage Inventory</Link>
+                  <Link to="/add-item">Add Item</Link>
+                  <Link to="/view-claims">View Claims</Link>
                 </div>
               </div>
-            )}
+            )
             <div className="auth-links">
               {!isAuthenticated ? (
                 <>
@@ -71,6 +75,9 @@ function App() {
             <Route path="/add-admin" element={<AddAdmin />} />
             <Route path="/manage-inventory" element={<ManageInventory />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/add-item" element={<AddItem />} />
+            <Route path="/view-claims" element={<ViewClaims />} />
+
           </Routes>
         </div>
       </Router>

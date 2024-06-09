@@ -19,7 +19,7 @@ function ManageInventory() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get('https://localhost:7224/api/items');
+      const response = await axios.get('http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/');
       setItems(response.data);
     } catch (error) {
       console.error('Error fetching items:', error);

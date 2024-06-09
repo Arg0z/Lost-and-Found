@@ -1,0 +1,38 @@
+
+.view-claims-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: #333;
+  }
+  
+  .view-claims-container h2 {
+    color: #007bff;
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  
+  .claims-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .claims-table th,
+  .claims-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .claims-table th {
+    background-color: #007bff;
+    color: white;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  
