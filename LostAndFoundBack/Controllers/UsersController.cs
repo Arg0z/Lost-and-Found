@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using LostAndFoundBack.Models;
 using Microsoft.AspNetCore.Identity;
 using LostAndFoundBack.DataBase;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LostAndFoundBack.Controllers
 {
