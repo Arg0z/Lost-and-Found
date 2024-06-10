@@ -34,7 +34,7 @@ builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendApp",
-        policy => policy.WithOrigins("http://localhost:3000") // React's URL
+        policy => policy.WithOrigins("https://frontend.d1s26047wlj6lo.amplifyapp.com/ ") // React's URL
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials()); // Allow credentials for cookie authentication
@@ -47,7 +47,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var userManager = services.GetRequiredService<UserManager<User>>();
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    await DbInitializer.Initialize(userManager, roleManager); // Initialize roles and users
+    //await DbInitializer.Initialize(userManager, roleManager); // Initialize roles and users
 }
 
 // Configure the HTTP request pipeline.
