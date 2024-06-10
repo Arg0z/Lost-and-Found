@@ -1,6 +1,4 @@
-// src/App.js
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Home from './components/Home';
 import Campus from './components/Campus';
@@ -16,6 +14,7 @@ import ManageInventory from './components/ManageInventory';
 import ForgotPassword from './components/ForgotPassword';
 import AddItem from './components/AddItem';
 import ViewClaims from './components/ViewClaims';
+import api from './api';
 import './App.css';
 
 function App() {
@@ -37,7 +36,7 @@ function App() {
             <Link to="/forms">Forms</Link>
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
-            
+            {isAuthenticated && (
               <div className="dropdown">
                 <button className="dropbtn">Admin</button>
                 <div className="dropdown-content">
@@ -48,15 +47,16 @@ function App() {
                   <Link to="/view-claims">View Claims</Link>
                 </div>
               </div>
+            )}
             <div className="auth-links">
-              
+              {!isAuthenticated ? (
                 <>
                   <Link to="/login">Login</Link>
                   <Link to="/signup">Sign Up</Link>
                 </>
-            
+              ) : (
                 <button onClick={handleLogout}>Logout</button>
-
+              )}
             </div>
           </nav>
         </header>
@@ -76,7 +76,6 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/add-item" element={<AddItem />} />
             <Route path="/view-claims" element={<ViewClaims />} />
-
           </Routes>
         </div>
       </Router>

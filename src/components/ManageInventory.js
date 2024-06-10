@@ -19,7 +19,7 @@ function ManageInventory() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get('http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/');
+      const response = await axios.get('https://localhost:7224/api/Items'); 
       setItems(response.data);
     } catch (error) {
       console.error('Error fetching items:', error);
@@ -34,7 +34,7 @@ function ManageInventory() {
   const handleAddItem = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('https://localhost:7224/api/items', newItem);
+      await axios.post('https://localhost:7224/api/Items', newItem); 
       fetchItems(); 
       setNewItem({ description: '', date_found: '', location_found: '', category: '', photo_url: '' });
     } catch (error) {
@@ -51,7 +51,7 @@ function ManageInventory() {
   const handleSaveEdit = async (event) => {
     event.preventDefault();
     try {
-      await axios.put(`https://localhost:7224/api/items/${editingItem.item_id}`, newItem);
+      await axios.put(`https://localhost:7224/api/Items/${editingItem.item_id}`, newItem); 
       fetchItems(); 
       setEditingItem(null);
       setNewItem({ description: '', date_found: '', location_found: '', category: '', photo_url: '' });
@@ -62,8 +62,8 @@ function ManageInventory() {
 
   const handleRemoveItem = async (id) => {
     try {
-      await axios.delete(`https://localhost:7224/api/items/${id}`);
-      fetchItems(); // Refresh the item list after deleting an item
+      await axios.delete(`https://localhost:7224/api/Items/${id}`); 
+      fetchItems(); 
     } catch (error) {
       console.error('Error removing item:', error);
     }
@@ -106,7 +106,7 @@ function ManageInventory() {
           ></textarea>
         </div>
         <div className="form-group">
-          <label htmlFor="date_found">Date Lost</label>
+          <label htmlFor="date_found">Date Found</label>
           <input
             type="date"
             id="date_found"
@@ -124,7 +124,7 @@ function ManageInventory() {
             <div><strong>Campus:</strong> {item.location_found}</div>
             <div><strong>Type:</strong> {item.category}</div>
             <div><strong>Description:</strong> {item.description}</div>
-            <div><strong>Date Lost:</strong> {new Date(item.date_found).toLocaleDateString()}</div>
+            <div><strong>Date Found:</strong> {new Date(item.date_found).toLocaleDateString()}</div>
             <button onClick={() => handleEditItem(item.item_id)} className="edit-button">Edit</button>
             <button onClick={() => handleRemoveItem(item.item_id)} className="remove-button">Remove</button>
           </div>

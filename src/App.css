@@ -58,7 +58,6 @@ body {
   color: #000000;
 }
 
-
 .page-container {
   padding: 20px;
   max-width: 1200px;
@@ -94,7 +93,7 @@ body {
   border-radius: 4px;
 }
 
-.dropdown-content.show {
+.dropdown:hover .dropdown-content {
   display: block; 
 }
 
@@ -108,7 +107,6 @@ body {
 .dropdown-content a:hover {
   background-color: #f1f1f1;
 }
-
 
 .dropdown:hover .dropbtn {
   background-color: #0056b3;
@@ -213,7 +211,6 @@ textarea {
   font-size: 1.1em;
 }
 
-
 /* Item list styles */
 .items-container {
   display: flex;
@@ -305,5 +302,4 @@ textarea {
   cursor: pointer;
   border-radius: 5px;
   display: block;
- 
 }

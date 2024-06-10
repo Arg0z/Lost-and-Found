@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import './Login.css';
 
-function Login({ setIsAuthenticated }) { 
-  const navigate = useNavigate(); 
+function Login({ setIsAuthenticated }) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -18,14 +18,14 @@ function Login({ setIsAuthenticated }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('/login', formData);
+      const response = await api.post('/login', formData); 
       if (response.status === 200) {
         console.log('Login successful');
         const { accessToken, refreshToken } = response.data;
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
-        setIsAuthenticated(true); 
-        navigate('/'); 
+        setIsAuthenticated(true);
+        navigate('/');
       } else {
         console.log('Login failed');
       }

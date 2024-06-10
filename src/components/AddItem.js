@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';  // Import axios for making HTTP requests
 import './AddItem.css';
 
 function AddItem() {
@@ -7,15 +8,26 @@ function AddItem() {
   const [itemType, setItemType] = useState('');
   const [campus, setCampus] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add item submission logic here
-    console.log({
-      itemName,
-      itemDescription,
-      itemType,
-      campus,
-    });
+    const newItem = {
+      description: itemDescription,
+      category: itemType,
+      location_found: campus,
+      date_found: new Date().toISOString(), 
+      photo_url: '',  
+    };
+
+    try {
+      const response = await axios.post('https://localhost:7224/api/Items', newItem);
+      if (response.status === 201) {
+        console.log('Item added successfully');
+      } else {
+        console.error('Failed to add item');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
