@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import api from '../api';
 import './Campus.css';
 
 const imageMap = {
@@ -19,20 +20,10 @@ function Campus() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const itemsResponse = await fetch(`https://localhost:7224/api/items/location/${campusName}`);
-        if (!itemsResponse.ok) {
-          throw new Error('Failed to fetch items');
-        }
-        const itemsData = await itemsResponse.json();
-
-        const countsResponse = await fetch(`https://localhost:7224/api/items/location/${campusName}/count-by-category`);
-        if (!countsResponse.ok) {
-          throw new Error('Failed to fetch category counts');
-        }
-        const countsData = await countsResponse.json();
-
-        setItems(itemsData);
-        setCategoryCounts(countsData);
+        const itemsResponse = await api.get(`/api/items/location/${campusName}`);
+        const countsResponse = await api.get(`/api/items/location/${campusName}/count-by-category`);
+        setItems(itemsResponse.data);
+        setCategoryCounts(countsResponse.data);
         setLoading(false);
       } catch (error) {
         console.error('Failed to fetch data', error);

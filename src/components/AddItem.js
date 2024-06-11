@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';  // Import axios for making HTTP requests
+import axios from 'axios'; 
 import './AddItem.css';
 
 function AddItem() {
@@ -19,7 +19,7 @@ function AddItem() {
     };
 
     try {
-      const response = await axios.post('https://localhost:7224/api/Items', newItem);
+      const response = await axios.post('http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items', newItem);
       if (response.status === 201) {
         console.log('Item added successfully');
       } else {

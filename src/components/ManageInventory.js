@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import './ManageInventory.css';
 
 function ManageInventory() {
@@ -19,7 +19,7 @@ function ManageInventory() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get('https://localhost:7224/api/Items'); 
+      const response = await api.get('/api/Items'); 
       setItems(response.data);
     } catch (error) {
       console.error('Error fetching items:', error);
@@ -34,7 +34,7 @@ function ManageInventory() {
   const handleAddItem = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('https://localhost:7224/api/Items', newItem); 
+      await api.post('/api/Items', newItem); 
       fetchItems(); 
       setNewItem({ description: '', date_found: '', location_found: '', category: '', photo_url: '' });
     } catch (error) {
@@ -51,7 +51,7 @@ function ManageInventory() {
   const handleSaveEdit = async (event) => {
     event.preventDefault();
     try {
-      await axios.put(`https://localhost:7224/api/Items/${editingItem.item_id}`, newItem); 
+      await api.put(`/api/Items/${editingItem.item_id}`, newItem); 
       fetchItems(); 
       setEditingItem(null);
       setNewItem({ description: '', date_found: '', location_found: '', category: '', photo_url: '' });
@@ -62,7 +62,7 @@ function ManageInventory() {
 
   const handleRemoveItem = async (id) => {
     try {
-      await axios.delete(`https://localhost:7224/api/Items/${id}`); 
+      await api.delete(`/api/Items/${id}`); 
       fetchItems(); 
     } catch (error) {
       console.error('Error removing item:', error);

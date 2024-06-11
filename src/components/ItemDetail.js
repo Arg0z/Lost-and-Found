@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import api from '../api';
 import './ItemDetail.css';
 
 function ItemDetail() {
@@ -11,12 +12,8 @@ function ItemDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://localhost:7224/api/items/location/${campusName}/category/${categoryName}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch item details');
-        }
-        const data = await response.json();
-        setItems(data);
+        const response = await api.get(`/api/items/location/${campusName}/category/${categoryName}`);
+        setItems(response.data);
         setLoading(false);
       } catch (error) {
         console.error('Failed to fetch data', error);
@@ -55,7 +52,7 @@ function ItemDetail() {
         ))}
       </div>
       <div className="contact-message">
-        If you think we have your charger, please <a href="tel:your-phone-number">call us</a>, or <Link to="/forms">apply online</Link>.
+        If you think we have your item, please <a href="tel:your-phone-number">call us</a>, or <Link to="/forms">apply online</Link>.
       </div>
     </div>
   );
