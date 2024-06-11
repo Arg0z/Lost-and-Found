@@ -19,7 +19,7 @@ function ManageInventory() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get('http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items'); 
+      const response = await axios.get('https://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items'); 
       setItems(response.data);
     } catch (error) {
       console.error('Error fetching items:', error);
@@ -34,13 +34,9 @@ function ManageInventory() {
   const handleAddItem = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items', newItem); 
-      if (response.status === 201) {
-        fetchItems(); 
-        setNewItem({ description: '', date_found: '', location_found: '', category: '', photo_url: '' });
-      } else {
-        console.error('Failed to add item');
-      }
+      await axios.post('https://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items', newItem); 
+      fetchItems(); 
+      setNewItem({ description: '', date_found: '', location_found: '', category: '', photo_url: '' });
     } catch (error) {
       console.error('Error adding item:', error);
     }
@@ -55,14 +51,10 @@ function ManageInventory() {
   const handleSaveEdit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.put(`http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items/${editingItem.item_id}`, newItem); 
-      if (response.status === 204) {
-        fetchItems(); 
-        setEditingItem(null);
-        setNewItem({ description: '', date_found: '', location_found: '', category: '', photo_url: '' });
-      } else {
-        console.error('Failed to save changes');
-      }
+      await axios.put(`https://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items/${editingItem.item_id}`, newItem); 
+      fetchItems(); 
+      setEditingItem(null);
+      setNewItem({ description: '', date_found: '', location_found: '', category: '', photo_url: '' });
     } catch (error) {
       console.error('Error saving item:', error);
     }
@@ -70,12 +62,8 @@ function ManageInventory() {
 
   const handleRemoveItem = async (id) => {
     try {
-      const response = await axios.delete(`http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items/${id}`); 
-      if (response.status === 204) {
-        fetchItems(); 
-      } else {
-        console.error('Failed to remove item');
-      }
+      await axios.delete(`https://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items/${id}`); 
+      fetchItems(); 
     } catch (error) {
       console.error('Error removing item:', error);
     }
