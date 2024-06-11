@@ -34,7 +34,7 @@ builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendApp",
-        policy => policy.WithOrigins("https://frontend.d1s26047wlj6lo.amplifyapp.com/ ") // React's URL
+        policy => policy.WithOrigins("https://frontend.d1s26047wlj6lo.amplifyapp.com/") // React's URL
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials()); // Allow credentials for cookie authentication
