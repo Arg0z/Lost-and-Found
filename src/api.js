@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com',
+  baseURL: 'http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com',
 });
 
 api.interceptors.request.use((config) => {
@@ -21,7 +21,7 @@ api.interceptors.response.use((response) => {
   if (error.response.status === 401 && !originalRequest._retry) {
     originalRequest._retry = true;
     const refreshToken = localStorage.getItem('refreshToken');
-    const response = await axios.post('https://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/refresh', { refreshToken });
+    const response = await axios.post('http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/refresh', { refreshToken });
     if (response.status === 200) {
       const { accessToken } = response.data;
       localStorage.setItem('accessToken', accessToken);

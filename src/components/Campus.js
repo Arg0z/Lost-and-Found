@@ -19,14 +19,14 @@ function Campus() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const itemsResponse = await fetch(`https://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/items/location/${campusName}`);
+        const itemsResponse = await fetch(`http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/items/location/${campusName}`);
         console.log('itemsResponse:', itemsResponse);
         if (!itemsResponse.ok) {
           throw new Error('Failed to fetch items');
         }
         const itemsData = await itemsResponse.json();
 
-        const countsResponse = await fetch(`https://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/items/location/${campusName}/count-by-category`);
+        const countsResponse = await fetch(`http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/items/location/${campusName}/count-by-category`);
         console.log('countsResponse:', countsResponse);
         if (!countsResponse.ok) {
           throw new Error('Failed to fetch category counts');
