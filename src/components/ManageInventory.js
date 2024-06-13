@@ -62,7 +62,7 @@ function ManageInventory() {
 
   const handleRemoveItem = async (id) => {
     try {
-      await axios.delete(`http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items/${id}`); 
+      await axios.delete(`https://cors-everywhere.herokuapp.com/http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items/${id}`); 
       fetchItems(); 
     } catch (error) {
       console.error('Error removing item:', error);
