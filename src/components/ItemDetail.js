@@ -11,7 +11,7 @@ function ItemDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://cors-everywhere.herokuapp.com/http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/items/location/${campusName}/category/${categoryName}`);
+        const response = await fetch(`https://cors-anywhere.herokuapp.com/http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/items/location/${campusName}/category/${categoryName}`);
         if (!response.ok) {
           throw new Error('Failed to fetch item details');
         }

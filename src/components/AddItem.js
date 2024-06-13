@@ -19,7 +19,7 @@ function AddItem() {
     };
 
     try {
-      const response = await axios.post('https://cors-everywhere.herokuapp.com/http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items', newItem);
+      const response = await axios.post('https://cors-anywhere.herokuapp.com/http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items', newItem);
       if (response.status === 201) {
         console.log('Item added successfully');
       } else {

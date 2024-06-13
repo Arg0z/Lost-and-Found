@@ -19,7 +19,7 @@ function ManageInventory() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get('http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items'); 
+      const response = await axios.get('https://cors-anywhere.herokuapp.com/http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items'); 
       setItems(response.data);
     } catch (error) {
       console.error('Error fetching items:', error);
@@ -34,7 +34,7 @@ function ManageInventory() {
   const handleAddItem = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items', newItem); 
+      await axios.post('https://cors-anywhere.herokuapp.com/http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items', newItem); 
       fetchItems(); 
       setNewItem({ description: '', date_found: '', location_found: '', category: '', photo_url: '' });
     } catch (error) {
@@ -51,7 +51,7 @@ function ManageInventory() {
   const handleSaveEdit = async (event) => {
     event.preventDefault();
     try {
-      await axios.put(`http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items/${editingItem.item_id}`, newItem); 
+      await axios.put(`https://cors-anywhere.herokuapp.com/http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items/${editingItem.item_id}`, newItem); 
       fetchItems(); 
       setEditingItem(null);
       setNewItem({ description: '', date_found: '', location_found: '', category: '', photo_url: '' });
@@ -62,7 +62,7 @@ function ManageInventory() {
 
   const handleRemoveItem = async (id) => {
     try {
-      await axios.delete(`https://cors-everywhere.herokuapp.com/http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items/${id}`); 
+      await axios.delete(`https://cors-anywhere.herokuapp.com/http://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api/Items/${id}`); 
       fetchItems(); 
     } catch (error) {
       console.error('Error removing item:', error);
