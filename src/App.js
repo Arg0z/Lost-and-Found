@@ -26,6 +26,30 @@ function App() {
     setIsAuthenticated(false);
   };
 
+  useEffect(() => {
+    // Automatically enable CORS Anywhere
+    fetch('https://cors-anywhere.herokuapp.com/corsdemo')
+      .then(response => {
+        if (response.ok) {
+          console.log('CORS Anywhere enabled');
+
+          // Use CORS Anywhere proxy for your API requests
+          const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+          const targetUrl = 'https://lostandfoundback-dev.eba-ihrrezy2.us-east-1.elasticbeanstalk.com/api'; // Replace with your actual backend API URL
+
+          fetch(proxyUrl + targetUrl)
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error fetching data:', error));
+        } else {
+          console.log('Failed to enable CORS Anywhere');
+        }
+      })
+      .catch(error => {
+        console.error('Error enabling CORS Anywhere:', error);
+      });
+  }, []); // Empty dependency array ensures the effect runs once after mount
+
   return (
     <div className="App">
       <Router>
