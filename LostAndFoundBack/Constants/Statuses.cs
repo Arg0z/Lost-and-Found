@@ -1,6 +1,6 @@
-﻿namespace LostAndFoundBack.Models
+﻿namespace LostAndFoundBack.Constants
 {
-    public enum Status
+    public enum Statuses
     {
         Unclaimed,
         Claimed,

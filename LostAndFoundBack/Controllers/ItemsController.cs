@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LostAndFoundBack.Constants;
 
 namespace LostAndFoundBack.Controllers
 {
@@ -67,7 +68,7 @@ namespace LostAndFoundBack.Controllers
         {
             try
             {
-                item.Status = Status.Unclaimed;
+                item.Status = Statuses.Unclaimed;
                 _context.Items.Add(item);
                 await _context.SaveChangesAsync();
                 return CreatedAtAction(nameof(GetItem), new { id = item.item_id }, item);

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LostAndFoundBack.Constants;
 
 namespace LostAndFoundBack.Models
 {
@@ -25,6 +26,6 @@ namespace LostAndFoundBack.Models
         public string photo_url { get; set; }
 
         [Column("item_status")]
-        public Status? Status { get; set; }
+        public Statuses? Status { get; set; }
     }
 }

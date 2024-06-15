@@ -19,7 +19,10 @@ builder.Services.AddAuthentication()
     .AddCookie()
     .AddBearerToken(IdentityConstants.BearerScheme); // Specify the authentication scheme and add Cookie authentication
 
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+})
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders()
     .AddApiEndpoints();
@@ -34,34 +37,34 @@ builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendApp",
-        policy => policy.WithOrigins("https://frontend.d1s26047wlj6lo.amplifyapp.com/") // React's URL
+        policy => policy.WithOrigins("https://frontend.d1s26047wlj6lo.amplifyapp.com") // React's URL
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .AllowCredentials()); // Allow credentials for cookie authentication
+                        .AllowCredentials());
 });
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var userManager = services.GetRequiredService<UserManager<User>>();
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    //await DbInitializer.Initialize(userManager, roleManager); // Initialize roles and users
-}
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.MapIdentityApi<User>();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    await DbInitializer.Initialize(roleManager); // Initialize roles only
+}
+
+// Configure the HTTP request pipeline.
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontendApp"); // Ensure CORS is used before UseRouting/UseAuthentication/UseAuthorization
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapIdentityApi<User>();
 
 app.Run();
