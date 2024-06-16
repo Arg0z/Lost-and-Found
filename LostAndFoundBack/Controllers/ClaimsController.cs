@@ -4,6 +4,7 @@ using LostAndFoundBack.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace LostAndFoundBack.Controllers
 {
@@ -12,10 +13,11 @@ namespace LostAndFoundBack.Controllers
     public class ClaimsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-
-        public ClaimsController(ApplicationDbContext context)
+        private readonly UserManager<User> _userManager;
+        public ClaimsController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/Claims
@@ -70,14 +72,27 @@ namespace LostAndFoundBack.Controllers
         }
 
         // POST: api/Claims
+        [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Claim>> PostClaim(Claim claim)
+        public async Task<IActionResult> PostClaim(Claim claim)
         {
-            _context.Claims.Add(claim);
-            await _context.SaveChangesAsync();
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+            else
+            {
+                claim.UserId = user.Id;
 
-            return CreatedAtAction("GetClaim", new { id = claim.ClaimId }, claim);
+                _context.Claims.Add(claim);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetClaim", new { id = claim.ClaimId }, claim);
+            }
+            
         }
+
 
         // DELETE: api/Claims/5
         [HttpDelete("{id}")]
@@ -99,5 +114,7 @@ namespace LostAndFoundBack.Controllers
         {
             return _context.Claims.Any(e => e.ClaimId == id);
         }
+
+
     }
 }
