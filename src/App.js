@@ -35,7 +35,7 @@ function App() {
           <nav>
             <Link to="/">Home</Link>
             <Link to="/forms">Forms</Link>
-            <Link to="/report">Forms</Link>
+            <Link to="/report">Report</Link>
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
             {isAuthenticated && (
