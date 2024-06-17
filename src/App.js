@@ -14,6 +14,8 @@ import ManageInventory from './components/ManageInventory';
 import ForgotPassword from './components/ForgotPassword';
 import AddItem from './components/AddItem';
 import ViewClaims from './components/ViewClaims';
+import Report from './components/Report';
+
 import './App.css';
 
 function App() {
@@ -33,6 +35,7 @@ function App() {
           <nav>
             <Link to="/">Home</Link>
             <Link to="/forms">Forms</Link>
+            <Link to="/report">Forms</Link>
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
             {isAuthenticated && (
@@ -68,6 +71,7 @@ function App() {
             <Route path="/signup" element={<Signup setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/reportt" element={<Report />} />
             <Route path="/about" element={<About />} />
             <Route path="/admin-search" element={<AdminSearch />} />
             <Route path="/add-admin" element={<AddAdmin />} />
