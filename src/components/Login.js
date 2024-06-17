@@ -18,7 +18,7 @@ function Login({ setIsAuthenticated }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('/login', formData); 
+      const response = await api.post('/Account/login', formData);
       if (response.status === 200) {
         console.log('Login successful');
         const { accessToken, refreshToken } = response.data;

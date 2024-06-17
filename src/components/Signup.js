@@ -6,9 +6,9 @@ import './Signup.css';
 function Signup() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
-    userName: '',
   });
 
   const handleChange = (e) => {
@@ -19,7 +19,7 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('/register', formData); 
+      const response = await api.post('/Account/register', formData);
       if (response.status === 200) {
         console.log('Registration successful');
         navigate('/login');
@@ -38,13 +38,13 @@ function Signup() {
         <h2>Register</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="userName">Username</label>
+            <label htmlFor="name">Name</label>
             <input
               type="text"
-              id="userName"
-              name="userName"
-              placeholder="Enter your username"
-              value={formData.userName}
+              id="name"
+              name="name"
+              placeholder="Enter your name"
+              value={formData.name}
               onChange={handleChange}
               required
             />

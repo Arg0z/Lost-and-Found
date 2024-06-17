@@ -19,12 +19,30 @@ import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('accessToken'));
+  const [userRoles, setUserRoles] = useState([]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      checkAuth();
+    }
+  }, [isAuthenticated]);
+
+  const checkAuth = async () => {
+    try {
+      const response = await api.get('/Account/get-roles');
+      setUserRoles(response.data);
+    } catch (error) {
+      console.error('Error fetching roles:', error);
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     setIsAuthenticated(false);
   };
+
+  const isAdmin = userRoles.includes('Admin');
 
   return (
     <div className="App">
@@ -36,7 +54,7 @@ function App() {
             <Link to="/forms">Forms</Link>
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
-            {isAuthenticated && (
+            {isAdmin && (
               <div className="dropdown">
                 <button className="dropbtn">Admin</button>
                 <div className="dropdown-content">
