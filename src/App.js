@@ -71,7 +71,6 @@ function App() {
             <Route path="/signup" element={<Signup setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/report" element={<Report />} />
             <Route path="/about" element={<About />} />
             <Route path="/admin-search" element={<AdminSearch />} />
             <Route path="/add-admin" element={<AddAdmin />} />
@@ -79,6 +78,7 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/add-item" element={<AddItem />} />
             <Route path="/view-claims" element={<ViewClaims />} />
+            <Route path="/report" element={<Report />} />
           </Routes>
         </div>
       </Router>
