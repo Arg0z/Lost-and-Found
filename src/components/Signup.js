@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import './Signup.css';
 
-function Signup() {
+function Signup({ setIsAuthenticated }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
