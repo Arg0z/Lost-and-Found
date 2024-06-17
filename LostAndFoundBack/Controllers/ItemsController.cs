@@ -265,6 +265,12 @@ namespace LostAndFoundBack.Controllers
             }
         }
 
+        [HttpGet("Statuses")]
+        public async Task<IActionResult> GetItemStatuses()
+        {
+            return Ok(Enum.GetNames(typeof(ItemStatuses)));
+        }
+
         private bool ItemExists(int id)
         {
             return _context.Items.Any(e => e.item_id == id);

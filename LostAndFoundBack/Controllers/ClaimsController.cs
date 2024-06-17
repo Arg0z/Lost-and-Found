@@ -111,6 +111,12 @@ namespace LostAndFoundBack.Controllers
             return NoContent();
         }
 
+        [HttpGet("Statuses")]
+        public async Task<IActionResult> GetClaimStatuses()
+        {
+            return Ok(Enum.GetNames(typeof(ClaimStatuses)));
+        }
+
         private bool ClaimExists(int id)
         {
             return _context.Claims.Any(e => e.ClaimId == id);
