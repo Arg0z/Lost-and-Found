@@ -30,7 +30,9 @@ function App() {
   const checkAuth = async () => {
     try {
       const response = await api.get('/Account/get-roles');
-      setUserRoles(response.data);
+      if (response && response.data) {
+        setUserRoles(response.data);
+      }
     } catch (error) {
       console.error('Error fetching roles:', error);
     }
