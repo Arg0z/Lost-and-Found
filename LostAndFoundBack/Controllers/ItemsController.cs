@@ -68,7 +68,7 @@ namespace LostAndFoundBack.Controllers
         {
             try
             {
-                item.Status = Statuses.Unclaimed;
+                item.Status = ItemStatuses.Unclaimed;
                 _context.Items.Add(item);
                 await _context.SaveChangesAsync();
                 return CreatedAtAction(nameof(GetItem), new { id = item.item_id }, item);
@@ -241,12 +241,6 @@ namespace LostAndFoundBack.Controllers
             }
         }
 
-        public class CategoryCountDto
-        {
-            public string Category { get; set; }
-            public int Count { get; set; }
-        }
-
         // GET: api/Items/category/{categoryName}
         [HttpGet("category/{categoryName}")]
         public async Task<IActionResult> GetItemCountByCategory(string categoryName)
@@ -275,5 +269,11 @@ namespace LostAndFoundBack.Controllers
         {
             return _context.Items.Any(e => e.item_id == id);
         }
+    }
+
+    public class CategoryCountDto
+    {
+        public string Category { get; set; }
+        public int Count { get; set; }
     }
 }

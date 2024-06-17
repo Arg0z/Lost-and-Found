@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LostAndFoundBack.Constants;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LostAndFoundBack.Models
@@ -9,6 +10,7 @@ namespace LostAndFoundBack.Models
         public int ClaimId { get; set; }
         public string UserId { get; set; }
         public int ItemId { get; set; }
+        public ClaimStatuses Status { get; set; }
 
     }
 }

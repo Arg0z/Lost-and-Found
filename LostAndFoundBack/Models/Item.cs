@@ -26,6 +26,6 @@ namespace LostAndFoundBack.Models
         public string photo_url { get; set; }
 
         [Column("item_status")]
-        public Statuses? Status { get; set; }
+        public ItemStatuses? Status { get; set; }
     }
 }

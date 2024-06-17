@@ -10,7 +10,7 @@ namespace LostAndFoundBack.DataBase
     {
         public static async Task Initialize(RoleManager<IdentityRole> roleManager)
         {
-            foreach (Roles role in Enum.GetValues(typeof(Roles)))
+            foreach (UserRoles role in Enum.GetValues(typeof(UserRoles)))
             {
                 if (!await roleManager.RoleExistsAsync(role.ToString()))
                 {

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using LostAndFoundBack.Constants;
 
 namespace LostAndFoundBack.Controllers
 {
@@ -84,7 +85,7 @@ namespace LostAndFoundBack.Controllers
             else
             {
                 claim.UserId = user.Id;
-
+                claim.Status = ClaimStatuses.New;
                 _context.Claims.Add(claim);
                 await _context.SaveChangesAsync();
 
