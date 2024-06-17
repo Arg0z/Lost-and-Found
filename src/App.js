@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Home from './components/Home';
 import Campus from './components/Campus';
@@ -14,37 +14,16 @@ import ManageInventory from './components/ManageInventory';
 import ForgotPassword from './components/ForgotPassword';
 import AddItem from './components/AddItem';
 import ViewClaims from './components/ViewClaims';
-import api from './api';
 import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('accessToken'));
-  const [userRoles, setUserRoles] = useState([]);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      checkAuth();
-    }
-  }, [isAuthenticated]);
-
-  const checkAuth = async () => {
-    try {
-      const response = await api.get('/Account/get-roles');
-      if (response && response.data) {
-        setUserRoles(response.data);
-      }
-    } catch (error) {
-      console.error('Error fetching roles:', error);
-    }
-  };
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     setIsAuthenticated(false);
   };
-
-  const isAdmin = userRoles.includes('Admin');
 
   return (
     <div className="App">
@@ -56,7 +35,7 @@ function App() {
             <Link to="/forms">Forms</Link>
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
-            {isAdmin && (
+            {isAuthenticated && (
               <div className="dropdown">
                 <button className="dropbtn">Admin</button>
                 <div className="dropdown-content">
@@ -86,7 +65,7 @@ function App() {
             <Route path="/campus/:campusName" element={<Campus />} />
             <Route path="/campus/:campusName/:categoryName" element={<ItemDetail />} />
             <Route path="/forms" element={<ClaimForm />} />
-            <Route path="/signup" element={<Signup />} />
+            <Route path="/signup" element={<Signup setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
