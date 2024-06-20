@@ -27,21 +27,28 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     .AddDefaultTokenProviders()
     .AddApiEndpoints();
 
-// Configure DbContext with SQL Server
+// Configure DbContext with SQL Server and enable retry on failure
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+    sqlServerOptionsAction: sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(30),
+            errorNumbersToAdd: null);
+    }));
 
-builder.Services.AddScoped<IItemRepository, ItemRepository>();
-
-// Correct place to configure CORS
+// Configure CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendApp",
-        policy => policy.WithOrigins("https://frontend.d1s26047wlj6lo.amplifyapp.com") // React's URL
+        policy => policy.WithOrigins("https://frontend.d1s26047wlj6lo.amplifyapp.com")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
 });
+
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
 
 var app = builder.Build();
 
