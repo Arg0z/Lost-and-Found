@@ -1,6 +1,6 @@
 ﻿namespace LostAndFoundBack.Constants
 {
-    public enum Roles
+    public enum UserRoles
     {
         Admin,
         User
