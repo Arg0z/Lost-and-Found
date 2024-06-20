@@ -275,6 +275,38 @@ namespace LostAndFoundBack.Controllers
         {
             return _context.Items.Any(e => e.item_id == id);
         }
+
+        [HttpGet("Filters")]
+        public async Task<ActionResult<IEnumerable<Item>>> GetItems(
+            [FromQuery] string? location,
+            [FromQuery] string? category,
+            [FromQuery] DateTime? date,
+            [FromQuery] ItemStatuses? status)
+        {
+            var itemsQuery = _context.Items.AsQueryable();
+
+            if (!string.IsNullOrEmpty(location))
+            {
+                itemsQuery = itemsQuery.Where(i => i.location_found == location);
+            }
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                itemsQuery = itemsQuery.Where(i => i.category == category);
+            }
+
+            if (date.HasValue)
+            {
+                itemsQuery = itemsQuery.Where(i => i.date_found.Date == date.Value.Date);
+            }
+
+            if (status.HasValue)
+            {
+                itemsQuery = itemsQuery.Where(i => i.Status == status);
+            }
+
+            return await itemsQuery.ToListAsync();
+        }
     }
 
     public class CategoryCountDto

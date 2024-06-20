@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using LostAndFoundBack.Constants;
+using LostAndFoundBack.Migrations;
 
 namespace LostAndFoundBack.Controllers
 {
@@ -85,7 +86,7 @@ namespace LostAndFoundBack.Controllers
             else
             {
                 claim.UserId = user.Id;
-                claim.Status = ClaimStatuses.New;
+                claim.Status = Constants.ClaimStatuses.New;
                 _context.Claims.Add(claim);
                 await _context.SaveChangesAsync();
 
@@ -114,14 +115,37 @@ namespace LostAndFoundBack.Controllers
         [HttpGet("Statuses")]
         public async Task<IActionResult> GetClaimStatuses()
         {
-            return Ok(Enum.GetNames(typeof(ClaimStatuses)));
+            return Ok(Enum.GetNames(typeof(Constants.ClaimStatuses)));
         }
 
         private bool ClaimExists(int id)
         {
             return _context.Claims.Any(e => e.ClaimId == id);
         }
+        [HttpGet("Filters")]
+        public async Task<ActionResult<IEnumerable<Claim>>> GetClaims(
+            [FromQuery] int? itemId,
+            [FromQuery] string? userId,
+            [FromQuery] Constants.ClaimStatuses? status)
+        {
+            var claimsQuery = _context.Claims.AsQueryable();
 
+            if (itemId.HasValue)
+            {
+                claimsQuery = claimsQuery.Where(c => c.ItemId == itemId);
+            }
 
+            if (!string.IsNullOrEmpty(userId))
+            {
+                claimsQuery = claimsQuery.Where(c => c.UserId == userId);
+            }
+
+            if (status.HasValue)
+            {
+                claimsQuery = claimsQuery.Where(c => c.Status == status);
+            }
+
+            return await claimsQuery.ToListAsync();
+        }
     }
 }
