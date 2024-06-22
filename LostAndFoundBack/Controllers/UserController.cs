@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using LostAndFoundBack.Models;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 
 namespace LostAndFoundBack.Controllers
 {
@@ -26,7 +24,7 @@ namespace LostAndFoundBack.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterModel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var user = new User
                 {
@@ -38,7 +36,6 @@ namespace LostAndFoundBack.Controllers
 
                 if (result.Succeeded)
                 {
-
                     await _userManager.AddToRoleAsync(user, "User");
 
                     return Ok(new { UserId = user.Id, UserName = user.UserName, Email = user.Email });
@@ -53,7 +50,6 @@ namespace LostAndFoundBack.Controllers
             }
 
             return BadRequest(ModelState);
-            
         }
 
         [HttpPost("login")]
@@ -92,6 +88,19 @@ namespace LostAndFoundBack.Controllers
 
             var roles = await _userManager.GetRolesAsync(user);
             return Ok(roles);
+        }
+
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(new { user.Id, user.UserName, user.Email });
         }
     }
 }

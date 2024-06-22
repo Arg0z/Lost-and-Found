@@ -4,7 +4,6 @@ using LostAndFoundBack.Repositories.Interfaces;
 using LostAndFoundBack.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication()
     .AddCookie()
-    .AddBearerToken(IdentityConstants.BearerScheme); // Specify the authentication scheme and add Cookie authentication
+    .AddBearerToken(IdentityConstants.BearerScheme);
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
@@ -42,7 +41,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendApp",
-        policy => policy.WithOrigins("https://frontend.d1s26047wlj6lo.amplifyapp.com")
+        policy => policy.WithOrigins("http://localhost:3000")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
