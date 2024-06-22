@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using LostAndFoundBack.Constants;
 using LostAndFoundBack.Migrations;
+using LostAndFoundBack.DbModels;
 
 namespace LostAndFoundBack.Controllers
 {

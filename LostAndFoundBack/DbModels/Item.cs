@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using LostAndFoundBack.Constants;
 
-namespace LostAndFoundBack.Models
+namespace LostAndFoundBack.DbModels
 {
     public class Item
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using LostAndFoundBack.DataBase;
-using LostAndFoundBack.Models;
+using LostAndFoundBack.DbModels;
 using LostAndFoundBack.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

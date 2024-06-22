@@ -1,9 +1,9 @@
-﻿using LostAndFoundBack.Models;
+﻿using LostAndFoundBack.DbModels;
 
 namespace LostAndFoundBack.Repositories.Interfaces
 {
-   
-        public interface IItemRepository
+
+    public interface IItemRepository
         {
             Task<IEnumerable<Item>> GetAllItemsAsync();
             Task<Item> GetItemByIdAsync(int id);
