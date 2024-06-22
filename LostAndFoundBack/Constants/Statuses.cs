@@ -14,4 +14,12 @@
         Rejected,
         Pending
     }
+
+    public enum ReportedItemStatuses
+    {
+        Approved,
+        New,
+        Pending,
+        Rejected
+    }
 }

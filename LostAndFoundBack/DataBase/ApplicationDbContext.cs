@@ -1,4 +1,5 @@
-﻿using LostAndFoundBack.Models;
+﻿using LostAndFoundBack.DbModels;
+using LostAndFoundBack.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ namespace LostAndFoundBack.DataBase
 
         public DbSet<Item> Items { get; set; }
         public DbSet<Claim> Claims { get; set; }
+        public DbSet<ReportedItem> ReportedItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

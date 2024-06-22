@@ -1,5 +1,4 @@
-﻿using LostAndFoundBack.Models;
-using LostAndFoundBack.DataBase;
+﻿using LostAndFoundBack.DataBase;
 using LostAndFoundBack.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LostAndFoundBack.Constants;
+using LostAndFoundBack.DbModels;
 
 namespace LostAndFoundBack.Controllers
 {

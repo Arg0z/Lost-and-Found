@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LostAndFoundBack.Models
+namespace LostAndFoundBack.DbModels
 {
     public class Claim
     {
