@@ -3,11 +3,14 @@ using LostAndFoundBack.DataBase;
 using LostAndFoundBack.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using LostAndFoundBack.Constants;
-using LostAndFoundBack.Migrations;
 using LostAndFoundBack.DbModels;
+using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace LostAndFoundBack.Controllers
 {
@@ -17,6 +20,7 @@ namespace LostAndFoundBack.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
+
         public ClaimsController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
@@ -87,15 +91,13 @@ namespace LostAndFoundBack.Controllers
             else
             {
                 claim.UserId = user.Id;
-                claim.Status = Constants.ClaimStatuses.New;
+                claim.Status = ClaimStatuses.New;
                 _context.Claims.Add(claim);
                 await _context.SaveChangesAsync();
 
                 return CreatedAtAction("GetClaim", new { id = claim.ClaimId }, claim);
             }
-            
         }
-
 
         // DELETE: api/Claims/5
         [HttpDelete("{id}")]
@@ -114,20 +116,21 @@ namespace LostAndFoundBack.Controllers
         }
 
         [HttpGet("Statuses")]
-        public async Task<IActionResult> GetClaimStatuses()
+        public IActionResult GetClaimStatuses()
         {
-            return Ok(Enum.GetNames(typeof(Constants.ClaimStatuses)));
+            return Ok(Enum.GetNames(typeof(ClaimStatuses)));
         }
 
         private bool ClaimExists(int id)
         {
             return _context.Claims.Any(e => e.ClaimId == id);
         }
+
         [HttpGet("Filters")]
         public async Task<ActionResult<IEnumerable<Claim>>> GetClaims(
             [FromQuery] int? itemId,
             [FromQuery] string? userId,
-            [FromQuery] Constants.ClaimStatuses? status)
+            [FromQuery] ClaimStatuses? status)
         {
             var claimsQuery = _context.Claims.AsQueryable();
 
@@ -149,4 +152,5 @@ namespace LostAndFoundBack.Controllers
             return await claimsQuery.ToListAsync();
         }
     }
+
 }

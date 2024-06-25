@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LostAndFoundBack.DataBase;
 using LostAndFoundBack.DbModels;
 
 namespace LostAndFoundBack.Controllers
 {
-    public class ReportedItemsController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ReportedItemsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
@@ -19,78 +19,49 @@ namespace LostAndFoundBack.Controllers
             _context = context;
         }
 
-        // GET: ReportedItems
-        public async Task<IActionResult> Index()
+        // GET: api/ReportedItems
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ReportedItem>>> GetReportedItems()
         {
-            return View(await _context.ReportedItems.ToListAsync());
+            return await _context.ReportedItems.ToListAsync();
         }
 
-        // GET: ReportedItems/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/ReportedItems/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ReportedItem>> GetReportedItem(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var reportedItem = await _context.ReportedItems.FindAsync(id);
 
-            var reportedItem = await _context.ReportedItems
-                .FirstOrDefaultAsync(m => m.item_id == id);
             if (reportedItem == null)
             {
                 return NotFound();
             }
 
-            return View(reportedItem);
+            return reportedItem;
         }
 
-        // GET: ReportedItems/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ReportedItems/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: api/ReportedItems
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("item_id,UserId,description,date_found,location_found,category,Status")] ReportedItem reportedItem)
+        public async Task<ActionResult<ReportedItem>> CreateReportedItem([Bind("item_id,UserId,description,date_found,location_found,category,Status")] ReportedItem reportedItem)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(reportedItem);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return CreatedAtAction(nameof(GetReportedItem), new { id = reportedItem.item_id }, reportedItem);
             }
-            return View(reportedItem);
+            return BadRequest(ModelState);
         }
 
-        // GET: ReportedItems/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var reportedItem = await _context.ReportedItems.FindAsync(id);
-            if (reportedItem == null)
-            {
-                return NotFound();
-            }
-            return View(reportedItem);
-        }
-
-        // POST: ReportedItems/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        // PUT: api/ReportedItems/5
+        [HttpPut("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("item_id,UserId,description,date_found,location_found,category,Status")] ReportedItem reportedItem)
+        public async Task<IActionResult> EditReportedItem(int id, [Bind("item_id,UserId,description,date_found,location_found,category,Status")] ReportedItem reportedItem)
         {
             if (id != reportedItem.item_id)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             if (ModelState.IsValid)
@@ -111,42 +82,26 @@ namespace LostAndFoundBack.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return NoContent();
             }
-            return View(reportedItem);
+            return BadRequest(ModelState);
         }
 
-        // GET: ReportedItems/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // DELETE: api/ReportedItems/5
+        [HttpDelete("{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteReportedItem(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var reportedItem = await _context.ReportedItems
-                .FirstOrDefaultAsync(m => m.item_id == id);
+            var reportedItem = await _context.ReportedItems.FindAsync(id);
             if (reportedItem == null)
             {
                 return NotFound();
             }
 
-            return View(reportedItem);
-        }
-
-        // POST: ReportedItems/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var reportedItem = await _context.ReportedItems.FindAsync(id);
-            if (reportedItem != null)
-            {
-                _context.ReportedItems.Remove(reportedItem);
-            }
-
+            _context.ReportedItems.Remove(reportedItem);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return NoContent();
         }
 
         private bool ReportedItemExists(int id)
