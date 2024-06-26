@@ -91,7 +91,7 @@ namespace LostAndFoundBack.Controllers
         }
 
         [Authorize]
-        [HttpGet("me")]
+        [HttpGet("user-information")]
         public async Task<IActionResult> GetCurrentUser()
         {
             var user = await _userManager.GetUserAsync(User);
