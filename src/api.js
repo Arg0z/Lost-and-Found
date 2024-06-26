@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://sheridanlostandfound.azurewebsites.net/api', // Ensure the base URL ends with /api
+  baseURL: 'https://localhost:7224/api', 
+  withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {
@@ -18,10 +19,10 @@ api.interceptors.response.use((response) => {
   return response;
 }, async (error) => {
   const originalRequest = error.config;
-  if (error.response && error.response.status === 401 && !originalRequest._retry) {
+  if (error.response.status === 401 && !originalRequest._retry) {
     originalRequest._retry = true;
     const refreshToken = localStorage.getItem('refreshToken');
-    const response = await axios.post('https://sheridanlostandfound.azurewebsites.net/api/Account/refresh', { refreshToken });
+    const response = await axios.post('https://localhost:7224/api/User/refresh', { refreshToken });
     if (response.status === 200) {
       const { accessToken } = response.data;
       localStorage.setItem('accessToken', accessToken);

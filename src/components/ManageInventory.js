@@ -19,7 +19,7 @@ function ManageInventory() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get('https://sheridanlostandfound.azurewebsites.net/api/Items'); 
+      const response = await axios.get('https://localhost:7224/api/Items');
       setItems(response.data);
     } catch (error) {
       console.error('Error fetching items:', error);
@@ -34,8 +34,8 @@ function ManageInventory() {
   const handleAddItem = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('https://sheridanlostandfound.azurewebsites.net/api/Items', newItem); 
-      fetchItems(); 
+      await axios.post('https://localhost:7224/api/Items', newItem);
+      fetchItems();
       setNewItem({ description: '', date_found: '', location_found: '', category: '', photo_url: '' });
     } catch (error) {
       console.error('Error adding item:', error);
@@ -51,8 +51,8 @@ function ManageInventory() {
   const handleSaveEdit = async (event) => {
     event.preventDefault();
     try {
-      await axios.put(`https://sheridanlostandfound.azurewebsites.net/api/Items/${editingItem.item_id}`, newItem); 
-      fetchItems(); 
+      await axios.put(`https://localhost:7224/api/Items/${editingItem.item_id}`, newItem);
+      fetchItems();
       setEditingItem(null);
       setNewItem({ description: '', date_found: '', location_found: '', category: '', photo_url: '' });
     } catch (error) {
@@ -62,8 +62,8 @@ function ManageInventory() {
 
   const handleRemoveItem = async (id) => {
     try {
-      await axios.delete(`https://sheridanlostandfound.azurewebsites.net/api/Items/${id}`); 
-      fetchItems(); 
+      await axios.delete(`https://localhost:7224/api/Items/${id}`);
+      fetchItems();
     } catch (error) {
       console.error('Error removing item:', error);
     }

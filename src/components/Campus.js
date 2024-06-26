@@ -19,14 +19,14 @@ function Campus() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const itemsResponse = await fetch(`https://sheridanlostandfound.azurewebsites.net/api/items/location/${campusName}`);
+        const itemsResponse = await fetch(`https://localhost:7224/api/items/location/${campusName}`);
         console.log('itemsResponse:', itemsResponse);
         if (!itemsResponse.ok) {
           throw new Error('Failed to fetch items');
         }
         const itemsData = await itemsResponse.json();
 
-        const countsResponse = await fetch(`https://sheridanlostandfound.azurewebsites.net/api/items/location/${campusName}/count-by-category`);
+        const countsResponse = await fetch(`https://localhost:7224/api/items/location/${campusName}/count-by-category`);
         console.log('countsResponse:', countsResponse);
         if (!countsResponse.ok) {
           throw new Error('Failed to fetch category counts');

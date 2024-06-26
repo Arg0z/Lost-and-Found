@@ -18,12 +18,11 @@ function Login({ setIsAuthenticated }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('/Account/login', formData);
+      const response = await api.post('/User/login', formData, { withCredentials: true });
       if (response.status === 200) {
         console.log('Login successful');
-        const { accessToken, refreshToken } = response.data;
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
+        const { id } = response.data;
+        localStorage.setItem('userId', id);
         setIsAuthenticated(true);
         navigate('/');
       } else {

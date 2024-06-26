@@ -1,28 +1,68 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import './ClaimForm.css';
 
 function ClaimForm() {
+  const [formData, setFormData] = useState({
+    dateLost: '',
+    campus: '',
+    itemType: '',
+    description: '',
+    email: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('https://localhost:7224/api/Claims', {
+        itemId: 1,
+        status: 0,
+        description: formData.description,
+        dateLost: formData.dateLost,
+        campus: formData.campus,
+        itemType: formData.itemType,
+        email: formData.email,
+        location_found: formData.campus,
+        category: formData.itemType
+      }, { withCredentials: true });
+
+      if (response.status === 201) {
+        console.log('Claim submitted successfully');
+      } else {
+        console.error('Failed to submit claim');
+      }
+    } catch (error) {
+      console.error('Error submitting claim:', error);
+    }
+  };
+
   return (
     <div className="form-container">
       <h2>Claiming Application</h2>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="date-lost">Date lost</label>
-          <input type="date" id="date-lost" name="date-lost" required />
+          <label htmlFor="dateLost">Date lost</label>
+          <input type="date" id="dateLost" name="dateLost" value={formData.dateLost} onChange={handleChange} required />
         </div>
         <div className="form-group">
           <label htmlFor="campus">Select Campus</label>
-          <select id="campus" name="campus" required>
-            <option value="" disabled selected>Select your campus</option>
+          <select id="campus" name="campus" value={formData.campus} onChange={handleChange} required>
+            <option value="" disabled>Select your campus</option>
             <option value="Davis">Davis</option>
             <option value="HMC">HMC</option>
             <option value="Trafalgar">Trafalgar</option>
           </select>
         </div>
         <div className="form-group">
-          <label htmlFor="item-type">Select Item Type</label>
-          <select id="item-type" name="item-type" required>
-            <option value="" disabled selected>Select item type</option>
+          <label htmlFor="itemType">Select Item Type</label>
+          <select id="itemType" name="itemType" value={formData.itemType} onChange={handleChange} required>
+            <option value="" disabled>Select item type</option>
             <option value="Charger">Charger</option>
             <option value="Bottle">Bottle</option>
             <option value="Wallet">Wallet</option>
@@ -33,7 +73,11 @@ function ClaimForm() {
         </div>
         <div className="form-group">
           <label htmlFor="description">Description</label>
-          <textarea id="description" name="description" rows="4" required></textarea>
+          <textarea id="description" name="description" rows="4" value={formData.description} onChange={handleChange} required></textarea>
+        </div>
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email" value={formData.email} onChange={handleChange} required />
         </div>
         <button type="submit" className="apply-button">Apply</button>
       </form>

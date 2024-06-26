@@ -19,7 +19,7 @@ function Signup({ setIsAuthenticated }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('/Account/register', formData);
+      const response = await api.post('/User/register', formData);
       if (response.status === 200) {
         console.log('Registration successful');
         navigate('/login');
