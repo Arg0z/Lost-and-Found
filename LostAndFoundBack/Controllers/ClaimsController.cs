@@ -134,18 +134,6 @@ namespace LostAndFoundBack.Controllers
             return await claimsQuery.ToListAsync();
         }
 
-        [HttpGet("ByUser/{userId}")]
-        public async Task<ActionResult<IEnumerable<Claim>>> GetClaimsByUserId(string userId)
-        {
-            var claims = await _context.Claims.Where(c => c.UserId == userId).ToListAsync();
-
-            if (claims == null || !claims.Any())
-            {
-                return NotFound();
-            }
-
-            return claims;
-        }
 
         [HttpGet("ByItem/{itemId}")]
         public async Task<ActionResult<IEnumerable<Claim>>> GetClaimsByItemId(int itemId)
