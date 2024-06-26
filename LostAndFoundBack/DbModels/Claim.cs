@@ -6,9 +6,8 @@ namespace LostAndFoundBack.DbModels
 {
     public class Claim
     {
-        [Required]
+        [Key]
         public int ClaimId { get; set; }
-        public string UserId { get; set; }
         public int ItemId { get; set; }
         public string description { get; set; }
         public DateTime date_found { get; set; }

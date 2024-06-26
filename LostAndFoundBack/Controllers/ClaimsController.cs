@@ -6,10 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using LostAndFoundBack.Constants;
 using LostAndFoundBack.DbModels;
-using System.ComponentModel.DataAnnotations;
 using System;
 
 namespace LostAndFoundBack.Controllers
@@ -19,12 +17,10 @@ namespace LostAndFoundBack.Controllers
     public class ClaimsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
 
-        public ClaimsController(ApplicationDbContext context, UserManager<User> userManager)
+        public ClaimsController(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
         // GET: api/Claims
@@ -79,24 +75,15 @@ namespace LostAndFoundBack.Controllers
         }
 
         // POST: api/Claims
-        [Authorize]
         [HttpPost]
-        public async Task<IActionResult> PostClaim(Claim claim)
+        public async Task<IActionResult> PostClaim([FromBody] Claim claim)
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-            else
-            {
-                claim.UserId = user.Id;
-                claim.Status = ClaimStatuses.New;
-                _context.Claims.Add(claim);
-                await _context.SaveChangesAsync();
+            claim.Status = ClaimStatuses.New;
 
-                return CreatedAtAction("GetClaim", new { id = claim.ClaimId }, claim);
-            }
+            _context.Claims.Add(claim);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetClaim", new { id = claim.ClaimId }, claim);
         }
 
         // DELETE: api/Claims/5
@@ -139,11 +126,6 @@ namespace LostAndFoundBack.Controllers
                 claimsQuery = claimsQuery.Where(c => c.ItemId == itemId);
             }
 
-            if (!string.IsNullOrEmpty(userId))
-            {
-                claimsQuery = claimsQuery.Where(c => c.UserId == userId);
-            }
-
             if (status.HasValue)
             {
                 claimsQuery = claimsQuery.Where(c => c.Status == status);
@@ -152,5 +134,4 @@ namespace LostAndFoundBack.Controllers
             return await claimsQuery.ToListAsync();
         }
     }
-
 }
