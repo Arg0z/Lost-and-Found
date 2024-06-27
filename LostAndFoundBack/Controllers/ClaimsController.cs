@@ -2,7 +2,6 @@
 using LostAndFoundBack.DataBase;
 using LostAndFoundBack.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -116,7 +115,6 @@ namespace LostAndFoundBack.Controllers
         [HttpGet("Filters")]
         public async Task<ActionResult<IEnumerable<Claim>>> GetClaims(
             [FromQuery] int? itemId,
-            [FromQuery] string? userId,
             [FromQuery] ClaimStatuses? status)
         {
             var claimsQuery = _context.Claims.AsQueryable();
