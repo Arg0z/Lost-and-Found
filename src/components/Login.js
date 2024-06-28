@@ -18,11 +18,23 @@ function Login({ setIsAuthenticated }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('/User/login', formData, { withCredentials: true });
+      const response = await api.post('/User/login', formData);
       if (response.status === 200) {
         console.log('Login successful');
-        const { id } = response.data;
-        localStorage.setItem('userId', id);
+        const { token } = response.data;
+        localStorage.setItem('accessToken', token);
+
+        const userResponse = await api.get('/User/user-information', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (userResponse.status === 200) {
+          const { id } = userResponse.data;
+          localStorage.setItem('userId', id);
+        }
+
         setIsAuthenticated(true);
         navigate('/');
       } else {

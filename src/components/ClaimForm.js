@@ -19,19 +19,23 @@ function ClaimForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const token = localStorage.getItem('accessToken');
+    const userId = localStorage.getItem('userId');
+
     try {
       const response = await axios.post('https://localhost:7224/api/Claims', {
+        userId: userId,
         itemId: 1,
-        status: 0,
         description: formData.description,
-        dateLost: formData.dateLost,
-        campus: formData.campus,
-        itemType: formData.itemType,
-        email: formData.email,
+        date_found: formData.dateLost,
         location_found: formData.campus,
-        category: formData.itemType
-      }, { withCredentials: true });
-
+        category: formData.itemType,
+        status: 0
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (response.status === 201) {
         console.log('Claim submitted successfully');
       } else {

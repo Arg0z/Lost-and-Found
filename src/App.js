@@ -18,7 +18,7 @@
 
   function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('accessToken'));
-
+    
     useEffect(() => {
       if (isAuthenticated) {
         // Any additional setup after login
