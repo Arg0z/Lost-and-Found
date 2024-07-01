@@ -43,6 +43,7 @@
               <Link to="/forms">Forms</Link>
               <Link to="/about">About</Link>
               <Link to="/contact">Contact</Link>
+              <Link to="/profile">Profile</Link>
               {isAuthenticated && (
                 <div className="dropdown">
                   <button className="dropbtn">Admin</button>
