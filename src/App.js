@@ -14,6 +14,8 @@
   import ForgotPassword from './components/ForgotPassword';
   import AddItem from './components/AddItem';
   import ViewClaims from './components/ViewClaims';
+  import UserProfile from './components/UserProfile';
+
   import './App.css';
 
   function App() {
@@ -81,6 +83,7 @@
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/add-item" element={<AddItem />} />
               <Route path="/view-claims" element={<ViewClaims />} />
+              <Route path="/profile" element={<UserProfile />} />
             </Routes>
           </div>
         </Router>
