@@ -7,8 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Configuration;
 using LostAndFoundBack.Security;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace LostAndFoundBack.Controllers
 {
@@ -83,7 +83,7 @@ namespace LostAndFoundBack.Controllers
             return Ok(new { message = "Logged out successfully." });
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("get-roles")]
         public async Task<IActionResult> GetUserRoles()
         {
@@ -97,7 +97,7 @@ namespace LostAndFoundBack.Controllers
             return Ok(roles);
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("user-information")]
         public async Task<IActionResult> GetCurrentUser()
         {

@@ -1,5 +1,4 @@
 ﻿using LostAndFoundBack.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,6 +14,7 @@ namespace LostAndFoundBack.Security
         {
             _configuration = configuration;
         }
+
         public string GenerateJwtToken(User user)
         {
             var claims = new[]
