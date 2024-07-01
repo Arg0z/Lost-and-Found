@@ -83,7 +83,7 @@ namespace LostAndFoundBack.Controllers
             return Ok(new { message = "Logged out successfully." });
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("get-roles")]
         public async Task<IActionResult> GetUserRoles()
         {
@@ -97,11 +97,14 @@ namespace LostAndFoundBack.Controllers
             return Ok(roles);
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("user-information")]
         public async Task<IActionResult> GetCurrentUser()
         {
-            var user = await _userManager.GetUserAsync(User);
+            User user = new User();
+            user.Id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            user.UserName = User.Identity.Name;
+            user.Email = User.FindFirst(ClaimTypes.Email)?.Value;
             if (user == null)
             {
                 return Unauthorized();

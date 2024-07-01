@@ -11,6 +11,9 @@ using LostAndFoundBack.Constants;
 using LostAndFoundBack.DbModels;
 using System.ComponentModel.DataAnnotations;
 using System;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
+using Claim = LostAndFoundBack.DbModels.Claim;
 namespace LostAndFoundBack.Controllers
 {
     [Route("api/[controller]")]
@@ -68,23 +71,15 @@ namespace LostAndFoundBack.Controllers
             return NoContent();
         }
         // POST: api/Claims
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
         public async Task<IActionResult> PostClaim(Claim claim)
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-            else
-            {
-                claim.UserId = user.Id;
-                claim.Status = ClaimStatuses.New;
-                _context.Claims.Add(claim);
-                await _context.SaveChangesAsync();
-                return CreatedAtAction("GetClaim", new { id = claim.ClaimId }, claim);
-            }
+            claim.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            claim.Status = ClaimStatuses.New;
+            _context.Claims.Add(claim);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("GetClaim", new { id = claim.ClaimId }, claim);
         }
         // DELETE: api/Claims/5
         [HttpDelete("{id}")]
