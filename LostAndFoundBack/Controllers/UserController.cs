@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using LostAndFoundBack.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using LostAndFoundBack.DataBase;
 
 namespace LostAndFoundBack.Controllers
 {
@@ -20,13 +21,15 @@ namespace LostAndFoundBack.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly ApplicationDbContext _context;
 
-        public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager, IConfiguration configuration)
+        public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager, IConfiguration configuration, ApplicationDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _context = context;
         }
 
         [HttpPost("register")]
@@ -87,11 +90,9 @@ namespace LostAndFoundBack.Controllers
         [HttpGet("get-roles")]
         public async Task<IActionResult> GetUserRoles()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var user = await _context.Users.FindAsync(userId);
 
             var roles = await _userManager.GetRolesAsync(user);
             return Ok(roles);
@@ -101,16 +102,13 @@ namespace LostAndFoundBack.Controllers
         [HttpGet("user-information")]
         public async Task<IActionResult> GetCurrentUser()
         {
-            User user = new User();
-            user.Id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            user.UserName = User.Identity.Name;
-            user.Email = User.FindFirst(ClaimTypes.Email)?.Value;
-            if (user == null)
-            {
-                return Unauthorized();
-            }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            return Ok(new { user.Id, user.UserName, user.Email });
+            var user = await _context.Users.FindAsync(userId);
+
+ 
+
+            return Ok(new { Id = userId, Name = user.UserName, Email = user.Email});
         }
     }
 }
