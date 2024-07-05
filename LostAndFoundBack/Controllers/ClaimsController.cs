@@ -75,11 +75,15 @@ namespace LostAndFoundBack.Controllers
         [HttpPost]
         public async Task<IActionResult> PostClaim(Claim claim)
         {
-            claim.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            claim.Status = ClaimStatuses.New;
-            _context.Claims.Add(claim);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction("GetClaim", new { id = claim.ClaimId }, claim);
+            if (ModelState.IsValid)
+            {
+                claim.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                claim.Status = ClaimStatuses.New;
+                _context.Claims.Add(claim);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction("GetClaim", new { id = claim.ClaimId }, claim);
+            }
+            return BadRequest();
         }
         // DELETE: api/Claims/5
         [HttpDelete("{id}")]

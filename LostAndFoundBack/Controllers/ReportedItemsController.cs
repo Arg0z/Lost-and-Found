@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LostAndFoundBack.DataBase;
 using LostAndFoundBack.DbModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace LostAndFoundBack.Controllers
 {
@@ -41,12 +44,14 @@ namespace LostAndFoundBack.Controllers
         }
 
         // POST: api/ReportedItems
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult<ReportedItem>> CreateReportedItem([Bind("item_id,UserId,description,date_found,location_found,category,Status")] ReportedItem reportedItem)
+        public async Task<ActionResult<ReportedItem>> CreateReportedItem(ReportedItem reportedItem)
         {
             if (ModelState.IsValid)
             {
+                reportedItem.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                reportedItem.Status = Constants.ReportedItemStatuses.New;
                 _context.Add(reportedItem);
                 await _context.SaveChangesAsync();
                 return CreatedAtAction(nameof(GetReportedItem), new { id = reportedItem.item_id }, reportedItem);
