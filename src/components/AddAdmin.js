@@ -6,7 +6,6 @@ function AddAdmin() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Here you would typically send the email to the server to add the user as an admin.
     console.log(`Admin with email ${email} added.`);
     setEmail('');
   };

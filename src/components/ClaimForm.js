@@ -23,7 +23,7 @@ function ClaimForm() {
     const userId = localStorage.getItem('userId');
 
     try {
-      const response = await axios.post('https://localhost:7224/api/Claims', {
+      const response = await axios.post('https://sheridanlostandfound.azurewebsites.net/api/Claims', {
         userId: userId,
         itemId: 1,
         description: formData.description,

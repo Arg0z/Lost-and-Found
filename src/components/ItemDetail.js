@@ -11,7 +11,7 @@ function ItemDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://localhost:7224/api/items/location/${campusName}/category/${categoryName}`);
+        const response = await fetch(`https://sheridanlostandfound.azurewebsites.net/api/items/location/${campusName}/category/${categoryName}`);
         if (!response.ok) {
           throw new Error('Failed to fetch item details');
         }

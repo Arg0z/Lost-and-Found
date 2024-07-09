@@ -23,7 +23,7 @@
     
     useEffect(() => {
       if (isAuthenticated) {
-        // Any additional setup after login
+        
       }
     }, [isAuthenticated]);
 
