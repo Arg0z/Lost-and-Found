@@ -14,6 +14,19 @@ function About() {
       <p>
         Additionally, the project endeavors to make a positive impact beyond the campus community by potentially generating funds for the student food bank through auctions of unclaimed items. By converting lost items into resources for a charitable cause, the project aligns with Sheridan College's values of community engagement and social responsibility.
       </p>
+      <h2>Developers</h2>
+      <p>
+        This project was developed by a team of dedicated individuals committed to making a difference in the community. The team includes:
+      </p>
+      <ul>
+        <li>Gurbir (Frontend)</li>
+        <li>Yehor (Backend)</li>
+        <li>Jashman (Backend)</li>
+      </ul>
+      <h2>Technologies Used</h2>
+      <p>
+        The project utilizes a React Native frontend with a .NET backend using C#.
+      </p>
     </div>
   );
 }
