@@ -31,16 +31,25 @@ body {
   align-items: center;
 }
 
-.App-header nav a {
+.App-header nav a,
+.dropbtn,
+.auth-links button {
   color: white;
   text-decoration: none;
   margin: 0 15px;
   font-size: 1em;
-  transition: color 0.3s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  padding: 10px 15px;
 }
 
-.App-header nav a:hover {
+.App-header nav a:hover,
+.dropbtn:hover,
+.auth-links button:hover {
   color: #0a0a0a;
+  background-color: #0056b3;
 }
 
 .auth-links {
@@ -73,18 +82,8 @@ body {
   display: inline-block;
 }
 
-.dropbtn {
-  background-color: transparent;
-  color: white;
-  padding: 10px 15px; 
-  font-size: 1em;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-}
-
 .dropdown-content {
-  display: none; 
+  display: none;
   position: absolute;
   background-color: #f9f9f9;
   min-width: 160px;
@@ -94,7 +93,7 @@ body {
 }
 
 .dropdown:hover .dropdown-content {
-  display: block; 
+  display: block;
 }
 
 .dropdown-content a {
@@ -106,61 +105,6 @@ body {
 
 .dropdown-content a:hover {
   background-color: #f1f1f1;
-}
-
-.dropdown:hover .dropbtn {
-  background-color: #0056b3;
-}
-
-/* Button styles */
-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 5px;
-  display: inline-block;
-  margin-top: 10px;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-/* Form styles */
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.form-group {
-  margin-bottom: 15px;
-  width: 100%;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-input[type="text"],
-input[type="date"],
-textarea,
-select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1em;
-}
-
-textarea {
-  resize: vertical;
 }
 
 /* Home page styles */
@@ -178,16 +122,16 @@ textarea {
   list-style-type: none;
   padding: 0;
   margin: 0;
-  display: flex; 
-  flex-wrap: wrap; 
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .home-container ul li {
   background-color: #007bff;
   color: white;
   padding: 15px;
-  margin-right: 10px; 
-  margin-bottom: 10px; 
+  margin-right: 10px;
+  margin-bottom: 10px;
   border-radius: 5px;
   transition: background-color 0.3s ease;
 }
