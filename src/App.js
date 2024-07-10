@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Home from './components/Home';
 import Campus from './components/Campus';
@@ -26,6 +26,33 @@ function App() {
     localStorage.removeItem('refreshToken');
     setIsAuthenticated(false);
   };
+
+  useEffect(() => {
+    const handleDropdownClick = (event) => {
+      const dropdown = document.querySelector('.dropdown');
+      dropdown.classList.toggle('show');
+    };
+
+    const handleClickOutside = (event) => {
+      if (!event.target.matches('.dropbtn')) {
+        const dropdowns = document.querySelectorAll('.dropdown-content');
+        dropdowns.forEach((dropdown) => {
+          if (dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+          }
+        });
+      }
+    };
+
+    const dropdownButton = document.querySelector('.dropbtn');
+    dropdownButton.addEventListener('click', handleDropdownClick);
+    window.addEventListener('click', handleClickOutside);
+
+    return () => {
+      dropdownButton.removeEventListener('click', handleDropdownClick);
+      window.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="App">
