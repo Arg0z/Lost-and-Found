@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import api from '../api';
+import axios from 'axios';
 import './UserProfile.css';
 
 function UserProfile() {
   const [userInfo, setUserInfo] = useState({
     name: '',
     email: '',
-    password: '',
   });
-
+  const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
         const token = localStorage.getItem('accessToken');
-        const response = await api.get('/User/user-information', {
+        const response = await axios.get('https://sheridanlostandfound.azurewebsites.net/api/User/user-information', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -29,7 +28,25 @@ function UserProfile() {
         setLoading(false);
       }
     };
+
+    const fetchUserRoles = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const response = await axios.get('https://sheridanlostandfound.azurewebsites.net/api/Users/get-roles', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.status === 200) {
+          setRoles(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching user roles:', error);
+      }
+    };
+
     fetchUserInfo();
+    fetchUserRoles();
   }, []);
 
   const handleChange = (e) => {
@@ -41,7 +58,7 @@ function UserProfile() {
     e.preventDefault();
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await api.put('/User/update', userInfo, {
+      const response = await axios.put('https://sheridanlostandfound.azurewebsites.net/api/User/update', userInfo, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -88,18 +105,24 @@ function UserProfile() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="phone">Phone</label>
           <input
-            type="password"
-            id="password"
-            name="password"
-            value={userInfo.password}
+            type="text"
+            id="phone"
+            name="phone"
+            value={userInfo.phone}
             onChange={handleChange}
             required
           />
         </div>
         <button type="submit" className="update-button">Update Profile</button>
       </form>
+      {roles.includes('Admin') && (
+        <div className="admin-info">
+          <h2>Admin Information</h2>
+          <p>Role: Admin</p>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import './Home.css';
 
 function Home() {
   const locations = [
@@ -9,14 +10,14 @@ function Home() {
   ];
 
   return (
-    <div>
+    <div className="home-container">
       <h1>LOST AND FOUND</h1>
       <div className="locations-container">
         {locations.map((location, index) => (
           <div className="location" key={index}>
             <Link to={location.link}>
-              <img src={location.image} alt={location.name} />
-              <div>{location.name}</div>
+              <img src={location.image} alt={location.name} className="location-image" />
+              <div className="location-name">{location.name}</div>
             </Link>
           </div>
         ))}
