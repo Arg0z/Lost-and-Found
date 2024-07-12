@@ -32,7 +32,7 @@ function UserProfile() {
     const fetchUserRoles = async () => {
       try {
         const token = localStorage.getItem('accessToken');
-        const response = await axios.get('https://sheridanlostandfound.azurewebsites.net/api/Users/get-roles', {
+        const response = await axios.get('https://sheridanlostandfound.azurewebsites.net/api/User/get-roles', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
