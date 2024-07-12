@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Home from './components/Home';
 import Campus from './components/Campus';
@@ -20,6 +20,7 @@ import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('accessToken'));
+  const dropdownRef = useRef(null);
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
@@ -29,27 +30,27 @@ function App() {
 
   useEffect(() => {
     const handleDropdownClick = (event) => {
-      const dropdown = document.querySelector('.dropdown');
-      dropdown.classList.toggle('show');
+      if (dropdownRef.current) {
+        dropdownRef.current.classList.toggle('show');
+      }
     };
 
     const handleClickOutside = (event) => {
-      if (!event.target.matches('.dropbtn')) {
-        const dropdowns = document.querySelectorAll('.dropdown-content');
-        dropdowns.forEach((dropdown) => {
-          if (dropdown.classList.contains('show')) {
-            dropdown.classList.remove('show');
-          }
-        });
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target) && !event.target.matches('.dropbtn')) {
+        dropdownRef.current.classList.remove('show');
       }
     };
 
     const dropdownButton = document.querySelector('.dropbtn');
-    dropdownButton.addEventListener('click', handleDropdownClick);
+    if (dropdownButton) {
+      dropdownButton.addEventListener('click', handleDropdownClick);
+    }
     window.addEventListener('click', handleClickOutside);
 
     return () => {
-      dropdownButton.removeEventListener('click', handleDropdownClick);
+      if (dropdownButton) {
+        dropdownButton.removeEventListener('click', handleDropdownClick);
+      }
       window.removeEventListener('click', handleClickOutside);
     };
   }, []);
@@ -66,7 +67,7 @@ function App() {
             <Link to="/contact">Contact</Link>
             {isAuthenticated && <Link to="/profile">Profile</Link>}
             {isAuthenticated && (
-              <div className="dropdown">
+              <div className="dropdown" ref={dropdownRef}>
                 <button className="dropbtn">Admin</button>
                 <div className="dropdown-content">
                   <Link to="/admin-search">Admin Search</Link>

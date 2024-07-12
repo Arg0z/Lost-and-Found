@@ -5,6 +5,11 @@ import './ViewClaims.css';
 function ViewClaims() {
   const [claims, setClaims] = useState([]);
   const [error, setError] = useState(null);
+  const [filters, setFilters] = useState({
+    itemId: '',
+    userId: '',
+    status: '',
+  });
   const [selectedClaim, setSelectedClaim] = useState(null);
   const [editFormData, setEditFormData] = useState({
     description: '',
@@ -14,14 +19,20 @@ function ViewClaims() {
     status: 0,
   });
 
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters({ ...filters, [name]: value });
+  };
+
   useEffect(() => {
     const fetchClaims = async () => {
       const token = localStorage.getItem('accessToken');
       try {
-        const response = await axios.get('https://sheridanlostandfound.azurewebsites.net/api/Claims', {
+        const response = await axios.get('https://sheridanlostandfound.azurewebsites.net/api/Claims/Filters', {
           headers: {
             'Authorization': `Bearer ${token}`
-          }
+          },
+          params: filters
         });
         setClaims(response.data);
       } catch (error) {
@@ -31,7 +42,7 @@ function ViewClaims() {
     };
 
     fetchClaims();
-  }, []);
+  }, [filters]);
 
   const handleEditClick = (claim) => {
     setSelectedClaim(claim);
@@ -62,7 +73,6 @@ function ViewClaims() {
         category: editFormData.category,
         status: parseInt(editFormData.status, 10),
         userId: editFormData.userId
-
       }, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -86,6 +96,34 @@ function ViewClaims() {
     <div className="view-claims-container">
       <h2>View Submitted Claims</h2>
       {error && <p className="error">{error}</p>}
+
+      <div className="filters-container">
+        <input
+          type="number"
+          placeholder="Item ID"
+          name="itemId"
+          value={filters.itemId}
+          onChange={handleFilterChange}
+        />
+        <input
+          type="text"
+          placeholder="User ID"
+          name="userId"
+          value={filters.userId}
+          onChange={handleFilterChange}
+        />
+        <select
+          name="status"
+          value={filters.status}
+          onChange={handleFilterChange}
+        >
+          <option value="">All Statuses</option>
+          <option value="0">New</option>
+          <option value="1">Approved</option>
+          <option value="2">Rejected</option>
+          <option value="3">Pending</option>
+        </select>
+      </div>
 
       {selectedClaim && (
         <div className="edit-form-container">
