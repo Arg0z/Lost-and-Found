@@ -1,32 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import './ClaimForm.css';
 
 function ClaimForm() {
   const [formData, setFormData] = useState({
-    itemId: '',
     dateLost: '',
     campus: '',
     itemType: '',
     description: '',
     email: ''
   });
-  const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await axios.get('https://sheridanlostandfound.azurewebsites.net/api/Items'); 
-        setItems(response.data);
-      } catch (error) {
-        setError('Failed to fetch items');
-        console.error('Error fetching items:', error);
-      }
-    };
-
-    fetchItems();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,11 +22,11 @@ function ClaimForm() {
 
     const token = localStorage.getItem('accessToken');
     const userId = localStorage.getItem('userId');
-
+    const itemId = Math.floor(Math.random() * 1000) + 1; 
     try {
       const response = await axios.post('https://sheridanlostandfound.azurewebsites.net/api/Claims', {
         userId: userId,
-        itemId: formData.itemId,
+        itemId: itemId,
         description: formData.description,
         date_found: formData.dateLost,
         location_found: formData.campus,
@@ -60,6 +44,7 @@ function ClaimForm() {
       }
     } catch (error) {
       console.error('Error submitting claim:', error);
+      setError('Failed to submit claim');
     }
   };
 
@@ -68,15 +53,6 @@ function ClaimForm() {
       <h2>Claiming Application</h2>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="itemId">Select Item</label>
-          <select id="itemId" name="itemId" value={formData.itemId} onChange={handleChange} required>
-            <option value="" disabled>Select an item</option>
-            {items.map((item) => (
-              <option key={item.id} value={item.id}>{item.name}</option>
-            ))}
-          </select>
-        </div>
         <div className="form-group">
           <label htmlFor="dateLost">Date lost</label>
           <input type="date" id="dateLost" name="dateLost" value={formData.dateLost} onChange={handleChange} required />
