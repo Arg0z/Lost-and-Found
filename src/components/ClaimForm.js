@@ -4,6 +4,7 @@ import './ClaimForm.css';
 
 function ClaimForm() {
   const [formData, setFormData] = useState({
+    itemId: '',
     dateLost: '',
     campus: '',
     itemType: '',
@@ -25,7 +26,7 @@ function ClaimForm() {
     try {
       const response = await axios.post('https://sheridanlostandfound.azurewebsites.net/api/Claims', {
         userId: userId,
-        itemId: 1,
+        itemId: formData.itemId,
         description: formData.description,
         date_found: formData.dateLost,
         location_found: formData.campus,
@@ -50,6 +51,17 @@ function ClaimForm() {
     <div className="form-container">
       <h2>Claiming Application</h2>
       <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="itemId">Item ID</label>
+          <input
+            type="text"
+            id="itemId"
+            name="itemId"
+            value={formData.itemId}
+            onChange={handleChange}
+            required
+          />
+        </div>
         <div className="form-group">
           <label htmlFor="dateLost">Date lost</label>
           <input type="date" id="dateLost" name="dateLost" value={formData.dateLost} onChange={handleChange} required />
