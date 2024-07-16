@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ClaimForm.css';
 
@@ -11,6 +11,22 @@ function ClaimForm() {
     description: '',
     email: ''
   });
+  const [items, setItems] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get('https://sheridanlostandfound.azurewebsites.net/api/Items'); 
+        setItems(response.data);
+      } catch (error) {
+        setError('Failed to fetch items');
+        console.error('Error fetching items:', error);
+      }
+    };
+
+    fetchItems();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,17 +66,16 @@ function ClaimForm() {
   return (
     <div className="form-container">
       <h2>Claiming Application</h2>
+      {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="itemId">Item ID</label>
-          <input
-            type="text"
-            id="itemId"
-            name="itemId"
-            value={formData.itemId}
-            onChange={handleChange}
-            required
-          />
+          <label htmlFor="itemId">Select Item</label>
+          <select id="itemId" name="itemId" value={formData.itemId} onChange={handleChange} required>
+            <option value="" disabled>Select an item</option>
+            {items.map((item) => (
+              <option key={item.id} value={item.id}>{item.name}</option>
+            ))}
+          </select>
         </div>
         <div className="form-group">
           <label htmlFor="dateLost">Date lost</label>
