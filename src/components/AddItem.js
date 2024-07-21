@@ -19,7 +19,7 @@ function AddItem() {
     };
 
     try {
-      const response = await axios.post('https://sheridanlostandfound.azurewebsites.net/api/Items', newItem);
+      const response = await axios.post('https://lostandfoundback-184f1a940482.herokuapp.com/api/Items', newItem);
       if (response.status === 201) {
         console.log('Item added successfully');
       } else {

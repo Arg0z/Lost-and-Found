@@ -24,7 +24,7 @@ function ClaimForm() {
     const userId = localStorage.getItem('userId');
     const itemId = Math.floor(Math.random() * 1000) + 1; 
     try {
-      const response = await axios.post('https://sheridanlostandfound.azurewebsites.net/api/Claims', {
+      const response = await axios.post('https://lostandfoundback-184f1a940482.herokuapp.com/api/Claims', {
         userId: userId,
         itemId: itemId,
         description: formData.description,

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://sheridanlostandfound.azurewebsites.net/api', 
+  baseURL: 'https://lostandfoundback-184f1a940482.herokuapp.com/api', 
   withCredentials: true,
 });
 
@@ -22,7 +22,7 @@ api.interceptors.response.use((response) => {
   if (error.response.status === 401 && !originalRequest._retry) {
     originalRequest._retry = true;
     const refreshToken = localStorage.getItem('refreshToken');
-    const response = await axios.post('https://sheridanlostandfound.azurewebsites.net/api/User/refresh', { refreshToken });
+    const response = await axios.post('https://lostandfoundback-184f1a940482.herokuapp.com/api/User/refresh', { refreshToken });
     if (response.status === 200) {
       const { accessToken } = response.data;
       localStorage.setItem('accessToken', accessToken);

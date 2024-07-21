@@ -28,7 +28,7 @@ function ViewClaims() {
     const fetchClaims = async () => {
       const token = localStorage.getItem('accessToken');
       try {
-        const response = await axios.get('https://sheridanlostandfound.azurewebsites.net/api/Claims/Filters', {
+        const response = await axios.get('https://lostandfoundback-184f1a940482.herokuapp.com/api/Claims/Filters', {
           headers: {
             'Authorization': `Bearer ${token}`
           },
@@ -65,7 +65,7 @@ function ViewClaims() {
     e.preventDefault();
     const token = localStorage.getItem('accessToken');
     try {
-      const response = await axios.put(`https://sheridanlostandfound.azurewebsites.net/api/Claims/${selectedClaim.claimId}`, {
+      const response = await axios.put(`https://lostandfoundback-184f1a940482.herokuapp.com/api/Claims/${selectedClaim.claimId}`, {
         claimId: selectedClaim.claimId,
         description: editFormData.description,
         date_found: editFormData.date_found,
