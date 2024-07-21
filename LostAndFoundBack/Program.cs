@@ -79,7 +79,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendApp",
-        policy => policy.WithOrigins("http://localhost:3000")
+        policy => policy.WithOrigins("https://frontend.d1s26047wlj6lo.amplifyapp.com", "http://localhost:3000")
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
