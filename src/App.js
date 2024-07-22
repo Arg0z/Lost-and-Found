@@ -21,6 +21,7 @@ import './App.css';
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('accessToken'));
   const dropdownRef = useRef(null);
+  const dropdownButtonRef = useRef(null);
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
@@ -29,19 +30,24 @@ function App() {
   };
 
   useEffect(() => {
-    const handleDropdownClick = (event) => {
+    const handleDropdownClick = () => {
       if (dropdownRef.current) {
         dropdownRef.current.classList.toggle('show');
       }
     };
 
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target) && !event.target.matches('.dropbtn')) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        dropdownButtonRef.current &&
+        !dropdownButtonRef.current.contains(event.target)
+      ) {
         dropdownRef.current.classList.remove('show');
       }
     };
 
-    const dropdownButton = document.querySelector('.dropbtn');
+    const dropdownButton = dropdownButtonRef.current;
     if (dropdownButton) {
       dropdownButton.addEventListener('click', handleDropdownClick);
     }
@@ -68,7 +74,7 @@ function App() {
             {isAuthenticated && <Link to="/profile">Profile</Link>}
             {isAuthenticated && (
               <div className="dropdown" ref={dropdownRef}>
-                <button className="dropbtn">Admin</button>
+                <button className="dropbtn" ref={dropdownButtonRef}>Admin</button>
                 <div className="dropdown-content">
                   <Link to="/admin-search">Admin Search</Link>
                   <Link to="/add-admin">Add Admin</Link>
