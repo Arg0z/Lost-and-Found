@@ -14,7 +14,7 @@ function UserProfile() {
     const fetchUserInfo = async () => {
       try {
         const token = localStorage.getItem('accessToken');
-        const response = await axios.get('https://sheridanlostandfound.azurewebsites.net/api/User/user-information', {
+        const response = await axios.get('https://lostandfoundback-184f1a940482.herokuapp.com/api/User/user-information', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -32,7 +32,7 @@ function UserProfile() {
     const fetchUserRoles = async () => {
       try {
         const token = localStorage.getItem('accessToken');
-        const response = await axios.get('https://sheridanlostandfound.azurewebsites.net/api/User/get-roles', {
+        const response = await axios.get('https://lostandfoundback-184f1a940482.herokuapp.com/api/User/get-roles', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
