@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import './Signup.css';
+import LoadingIndicator from './LoadingIndicator';
 
 function Signup({ setIsAuthenticated }) {
   const navigate = useNavigate();
@@ -10,6 +11,8 @@ function Signup({ setIsAuthenticated }) {
     email: '',
     password: '',
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,24 +21,30 @@ function Signup({ setIsAuthenticated }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setSuccessMessage('');
     try {
       const response = await api.post('/User/register', formData);
       if (response.status === 200) {
-        console.log('Registration successful');
+        setSuccessMessage('Registration successful');
         navigate('/login');
       } else {
         console.log('Registration failed');
       }
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="signup-container">
+      <LoadingIndicator isLoading={isLoading} />
       <h1>Lost and Found</h1>
       <div className="signup-form">
         <h2>Register</h2>
+        {successMessage && <p className="success">{successMessage}</p>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">Name</label>

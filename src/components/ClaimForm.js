@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './ClaimForm.css';
+import LoadingIndicator from './LoadingIndicator';
 
 function ClaimForm() {
   const [formData, setFormData] = useState({
@@ -11,6 +12,8 @@ function ClaimForm() {
     email: ''
   });
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,7 +22,8 @@ function ClaimForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
+    setSuccessMessage('');
     const token = localStorage.getItem('accessToken');
     const userId = localStorage.getItem('userId');
     const itemId = Math.floor(Math.random() * 1000) + 1; 
@@ -38,20 +42,24 @@ function ClaimForm() {
         }
       });
       if (response.status === 201) {
-        console.log('Claim submitted successfully');
+        setSuccessMessage('Claim submitted successfully');
       } else {
         console.error('Failed to submit claim');
       }
     } catch (error) {
       console.error('Error submitting claim:', error);
       setError('Failed to submit claim');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="form-container">
+      <LoadingIndicator isLoading={isLoading} />
       <h2>Claiming Application</h2>
       {error && <p className="error">{error}</p>}
+      {successMessage && <p className="success">{successMessage}</p>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="dateLost">Date lost</label>

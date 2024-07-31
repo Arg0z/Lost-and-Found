@@ -19,6 +19,13 @@ function ViewClaims() {
     status: 0,
   });
 
+  const statusMapping = {
+    0: "New",
+    1: "Approved",
+    2: "Rejected",
+    3: "Pending"
+  };
+
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters({ ...filters, [name]: value });
@@ -216,7 +223,7 @@ function ViewClaims() {
                 <td>{new Date(claim.date_found).toLocaleDateString()}</td>
                 <td>{claim.location_found}</td>
                 <td>{claim.category}</td>
-                <td>{claim.status}</td>
+                <td>{statusMapping[claim.status]}</td>
                 <td>
                   <button onClick={() => handleEditClick(claim)}>Edit</button>
                 </td>

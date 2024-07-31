@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import './Login.css';
+import LoadingIndicator from './LoadingIndicator';
 
 function Login({ setIsAuthenticated }) {
   const navigate = useNavigate();
@@ -9,6 +10,8 @@ function Login({ setIsAuthenticated }) {
     email: '',
     password: '',
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,6 +20,8 @@ function Login({ setIsAuthenticated }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setSuccessMessage('');
     try {
       const response = await api.post('/User/login', formData);
       if (response.status === 200) {
@@ -36,20 +41,25 @@ function Login({ setIsAuthenticated }) {
         }
 
         setIsAuthenticated(true);
+        setSuccessMessage('Successfully logged in');
         navigate('/');
       } else {
         console.log('Login failed');
       }
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="login-container">
+      <LoadingIndicator isLoading={isLoading} />
       <h1>Lost and Found</h1>
       <div className="login-form">
         <h2>Login</h2>
+        {successMessage && <p className="success">{successMessage}</p>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
