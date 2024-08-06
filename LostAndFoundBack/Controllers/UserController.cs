@@ -47,7 +47,7 @@ namespace LostAndFoundBack.Controllers
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "User");
+                    await _userManager.AddToRoleAsync(user, "Admin");
 
                     return Ok(new { UserId = user.Id, UserName = user.UserName, Email = user.Email });
                 }
