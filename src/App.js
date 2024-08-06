@@ -15,18 +15,46 @@ import ForgotPassword from './components/ForgotPassword';
 import AddItem from './components/AddItem';
 import ViewClaims from './components/ViewClaims';
 import UserProfile from './components/UserProfile';
+import api from './api';
 
 import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('accessToken'));
+  const [isAdmin, setIsAdmin] = useState(false); 
   const dropdownRef = useRef(null);
   const dropdownButtonRef = useRef(null);
+
+  useEffect(() => {
+    const fetchUserRoles = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        try {
+          const response = await api.get('/User/get-roles', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          if (response.status === 200) {
+            const roles = response.data;
+            setIsAdmin(roles.includes('Admin')); 
+          }
+        } catch (error) {
+          console.error('Error fetching user roles:', error);
+        }
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchUserRoles();
+    }
+  }, [isAuthenticated]);
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     setIsAuthenticated(false);
+    setIsAdmin(false); 
   };
 
   useEffect(() => {
@@ -72,7 +100,7 @@ function App() {
             <Link to="/about">About</Link>
             <Link to="/contact">Contact</Link>
             {isAuthenticated && <Link to="/profile">Profile</Link>}
-            {isAuthenticated && (
+            {isAuthenticated && isAdmin && ( 
               <div className="dropdown" ref={dropdownRef}>
                 <button className="dropbtn" ref={dropdownButtonRef}>Admin</button>
                 <div className="dropdown-content">
