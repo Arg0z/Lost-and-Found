@@ -59,35 +59,24 @@ function App() {
 
   useEffect(() => {
     const handleDropdownClick = () => {
-      if (dropdownRef.current) {
-        dropdownRef.current.classList.toggle('show');
-      }
+        if (dropdownRef.current) {
+            dropdownRef.current.classList.toggle('show');
+        }
     };
 
     const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target) &&
-        dropdownButtonRef.current &&
-        !dropdownButtonRef.current.contains(event.target)
-      ) {
-        dropdownRef.current.classList.remove('show');
-      }
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            dropdownRef.current.classList.remove('show');
+        }
     };
 
-    const dropdownButton = dropdownButtonRef.current;
-    if (dropdownButton) {
-      dropdownButton.addEventListener('click', handleDropdownClick);
-    }
-    window.addEventListener('click', handleClickOutside);
+    document.addEventListener('click', handleClickOutside);
 
     return () => {
-      if (dropdownButton) {
-        dropdownButton.removeEventListener('click', handleDropdownClick);
-      }
-      window.removeEventListener('click', handleClickOutside);
+        document.removeEventListener('click', handleClickOutside);
     };
-  }, []);
+}, []);
+
 
   return (
     <div className="App">
