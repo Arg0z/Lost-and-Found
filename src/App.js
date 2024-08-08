@@ -59,16 +59,18 @@ function App() {
 
   useEffect(() => {
     const handleDropdownClick = () => {
-        if (dropdownRef.current) {
-            dropdownRef.current.classList.toggle('show');
-        }
-    };
-
-    const handleClickOutside = (event) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-            dropdownRef.current.classList.remove('show');
-        }
-    };
+      console.log("Dropdown clicked");
+      if (dropdownRef.current) {
+          dropdownRef.current.classList.toggle('show');
+      }
+  };
+  
+  const handleClickOutside = (event) => {
+      console.log("Click outside");
+      if (!dropdownRef.current.contains(event.target)) {
+          dropdownRef.current.classList.remove('show');
+      }
+  };
 
     document.addEventListener('click', handleClickOutside);
 

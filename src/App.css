@@ -80,17 +80,19 @@ body {
 .dropdown {
   position: relative;
   display: inline-block;
+  z-index: 1000;
 }
 
 .dropdown-content {
-  display: none;
+
+  display: block !important;
   position: absolute;
   background-color: #ffffff;
   min-width: 160px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border-radius: 4px;
-  color: black; /* Ensures text is visible */
+  color: black; 
 }
 
 .dropdown-content a {
