@@ -37,19 +37,19 @@ function App() {
           });
           if (response.status === 200) {
             const roles = response.data;
-            setIsAdmin(roles.includes('Admin')); 
+            setIsAdmin(roles.includes('Admin'));  
           }
         } catch (error) {
           console.error('Error fetching user roles:', error);
         }
       }
     };
-
+  
     if (isAuthenticated) {
       fetchUserRoles();
     }
   }, [isAuthenticated]);
-
+  
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
