@@ -86,6 +86,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddSingleton<EmailService, EmailService>();
 
 var app = builder.Build();
 

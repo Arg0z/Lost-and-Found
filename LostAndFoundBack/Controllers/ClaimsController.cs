@@ -22,10 +22,12 @@ namespace LostAndFoundBack.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
-        public ClaimsController(ApplicationDbContext context, UserManager<User> userManager)
+        private readonly EmailService _emailService;
+        public ClaimsController(ApplicationDbContext context, UserManager<User> userManager, EmailService emailService)
         {
             _context = context;
             _userManager = userManager;
+            _emailService = emailService;
         }
         // GET: api/Claims
         [HttpGet]
@@ -81,6 +83,17 @@ namespace LostAndFoundBack.Controllers
                 claim.Status = ClaimStatuses.New;
                 _context.Claims.Add(claim);
                 await _context.SaveChangesAsync();
+
+
+                var user = await _context.Users.FindAsync(claim.UserId);
+                var userEmail = user.Email; // Assuming you have the user's email in claims
+                if (!string.IsNullOrEmpty(userEmail))
+                {
+                    var subject = "Claim Submission Confirmation";
+                    var message = "Your claim has been successfully submitted.";
+                    await _emailService.SendEmailAsync(userEmail, subject, message);
+                }
+
                 return CreatedAtAction("GetClaim", new { id = claim.ClaimId }, claim);
             }
             return BadRequest();
