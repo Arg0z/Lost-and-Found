@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using LostAndFoundBack.Models;
+using LostAndFoundBack.DataBase;
+using LostAndFoundBack.DbModels;
 using LostAndFoundBack.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ namespace LostAndFoundBack.Repositories
             _context = context;
         }
 
-        public async Task<List<Item>> GetAllItemsAsync()
+        public async Task<IEnumerable<Item>> GetAllItemsAsync()
         {
             return await _context.Items.ToListAsync();
         }

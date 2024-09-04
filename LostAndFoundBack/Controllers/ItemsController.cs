@@ -1,156 +1,317 @@
-﻿using System;
+﻿using LostAndFoundBack.DataBase;
+using LostAndFoundBack.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using LostAndFoundBack.Models;
+using LostAndFoundBack.Constants;
+using LostAndFoundBack.DbModels;
 
 namespace LostAndFoundBack.Controllers
 {
-    public class ItemsController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ItemsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IItemRepository _itemRepository;
+        private readonly ILogger<ItemsController> _logger;
 
-        public ItemsController(ApplicationDbContext context)
+        public ItemsController(ApplicationDbContext context, IItemRepository itemRepository, ILogger<ItemsController> logger)
         {
             _context = context;
+            _itemRepository = itemRepository;
+            _logger = logger;
         }
 
-        // GET: Items
-        public async Task<IActionResult> Index()
+        // GET: api/Items
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Item>>> GetItems()
         {
-            return View(await _context.Items.ToListAsync());
-        }
-
-        // GET: Items/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            try
             {
-                return NotFound();
+                var items = await _itemRepository.GetAllItemsAsync();
+                return Ok(items);
             }
-
-            var item = await _context.Items
-                .FirstOrDefaultAsync(m => m.item_id == id);
-            if (item == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogError(ex, "An error occurred while getting items.");
+                return StatusCode(500, "Internal server error");
             }
-
-            return View(item);
         }
 
-        // GET: Items/Create
-        public IActionResult Create()
+        // GET: api/Items/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Item>> GetItem(int id)
         {
-            return View();
+            try
+            {
+                var item = await _context.Items.FindAsync(id);
+                if (item == null)
+                {
+                    return NotFound();
+                }
+                return item;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while getting the item.");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
-        // POST: Items/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: api/Items
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("item_id,description,date_found,location_found,category,photo_url")] Item item)
+        public async Task<ActionResult<Item>> PostItem(Item item)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(item);
+                item.Status = ItemStatuses.Unclaimed;
+                _context.Items.Add(item);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return CreatedAtAction(nameof(GetItem), new { id = item.item_id }, item);
             }
-            return View(item);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while posting the item.");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
-        // GET: Items/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var item = await _context.Items.FindAsync(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-            return View(item);
-        }
-
-        // POST: Items/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("item_id,description,date_found,location_found,category,photo_url")] Item item)
+        // PUT: api/Items/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutItem(int id, Item item)
         {
             if (id != item.item_id)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(item).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(item);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ItemExists(item.item_id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            return View(item);
+            catch (DbUpdateConcurrencyException ex)
+            {
+                if (!ItemExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    _logger.LogError(ex, "An error occurred while updating the item.");
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while updating the item.");
+                return StatusCode(500, "Internal server error");
+            }
+
+            return NoContent();
         }
 
-        // GET: Items/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // DELETE: api/Items/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteItem(int id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                var item = await _context.Items.FindAsync(id);
+                if (item == null)
+                {
+                    return NotFound();
+                }
 
-            var item = await _context.Items
-                .FirstOrDefaultAsync(m => m.item_id == id);
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            return View(item);
-        }
-
-        // POST: Items/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var item = await _context.Items.FindAsync(id);
-            if (item != null)
-            {
                 _context.Items.Remove(item);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while deleting the item.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // GET: api/Items/location/{location}
+        [HttpGet("location/{location}")]
+        public async Task<ActionResult<IEnumerable<Item>>> GetItemsByLocation(string location)
+        {
+            try
+            {
+                var items = await _context.Items
+                                          .Where(item => item.location_found.ToLower() == location.ToLower())
+                                          .ToListAsync();
+                if (items == null || items.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                return Ok(items);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while getting items by location.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // GET: api/Items/location/{location}/category/{categoryName}
+        [HttpGet("location/{location}/category/{categoryName}")]
+        public async Task<ActionResult<IEnumerable<Item>>> GetItemsByLocationAndCategory(string location, string categoryName)
+        {
+            try
+            {
+                var items = await _context.Items
+                                          .Where(item => item.location_found.ToLower() == location.ToLower() &&
+                                                         item.category.ToLower() == categoryName.ToLower())
+                                          .ToListAsync();
+                if (items == null || items.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                return Ok(items);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while getting items by location and category.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // GET: api/Items/categories/json
+        [HttpGet("categories/json")]
+        public async Task<IActionResult> GetCategoriesWithCountsAsJson()
+        {
+            try
+            {
+                var categoryCounts = await _context.Items
+                    .GroupBy(i => i.category)
+                    .Select(g => new
+                    {
+                        Category = g.Key,
+                        Count = g.Count()
+                    })
+                    .ToListAsync();
+
+                return new JsonResult(categoryCounts);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while getting categories with counts.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // GET: api/Items/location/{location}/count-by-category
+        [HttpGet("location/{location}/count-by-category")]
+        public async Task<ActionResult<IEnumerable<CategoryCountDto>>> GetItemsCountByCategory(string location)
+        {
+            try
+            {
+                var itemsCountByCategory = await _context.Items
+                    .Where(item => item.location_found.ToLower() == location.ToLower())
+                    .GroupBy(item => item.category)
+                    .Select(group => new CategoryCountDto
+                    {
+                        Category = group.Key,
+                        Count = group.Count()
+                    })
+                    .ToListAsync();
+
+                if (itemsCountByCategory == null || itemsCountByCategory.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                return Ok(itemsCountByCategory);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while getting item counts by category.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // GET: api/Items/category/{categoryName}
+        [HttpGet("category/{categoryName}")]
+        public async Task<IActionResult> GetItemCountByCategory(string categoryName)
+        {
+            if (string.IsNullOrWhiteSpace(categoryName))
+            {
+                return BadRequest("Category name cannot be null or empty.");
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var itemCount = await _context.Items
+                    .Where(i => i.category.ToLower() == categoryName.ToLower())
+                    .CountAsync();
+
+                return Ok(new { Category = categoryName, Count = itemCount });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while getting item count by category.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpGet("Statuses")]
+        public async Task<IActionResult> GetItemStatuses()
+        {
+            return Ok(Enum.GetNames(typeof(ItemStatuses)));
         }
 
         private bool ItemExists(int id)
         {
             return _context.Items.Any(e => e.item_id == id);
         }
+
+        [HttpGet("Filters")]
+        public async Task<ActionResult<IEnumerable<Item>>> GetItems(
+            [FromQuery] string? location,
+            [FromQuery] string? category,
+            [FromQuery] DateTime? date,
+            [FromQuery] ItemStatuses? status)
+        {
+            var itemsQuery = _context.Items.AsQueryable();
+
+            if (!string.IsNullOrEmpty(location))
+            {
+                itemsQuery = itemsQuery.Where(i => i.location_found == location);
+            }
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                itemsQuery = itemsQuery.Where(i => i.category == category);
+            }
+
+            if (date.HasValue)
+            {
+                itemsQuery = itemsQuery.Where(i => i.date_found.Date == date.Value.Date);
+            }
+
+            if (status.HasValue)
+            {
+                itemsQuery = itemsQuery.Where(i => i.Status == status);
+            }
+
+            return await itemsQuery.ToListAsync();
+        }
+    }
+
+    public class CategoryCountDto
+    {
+        public string Category { get; set; }
+        public int Count { get; set; }
     }
 }

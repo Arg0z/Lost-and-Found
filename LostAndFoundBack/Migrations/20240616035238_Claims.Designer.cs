@@ -4,6 +4,7 @@ using LostAndFoundBack.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LostAndFoundBack.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240616035238_Claims")]
+    partial class Claims
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace LostAndFoundBack.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("LostAndFoundBack.DbModels.Claim", b =>
+            modelBuilder.Entity("LostAndFoundBack.Models.Claim", b =>
                 {
                     b.Property<int>("ClaimId")
                         .ValueGeneratedOnAdd()
@@ -33,21 +36,7 @@ namespace LostAndFoundBack.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("category")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("date_found")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("location_found")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -56,7 +45,7 @@ namespace LostAndFoundBack.Migrations
                     b.ToTable("Claims");
                 });
 
-            modelBuilder.Entity("LostAndFoundBack.DbModels.Item", b =>
+            modelBuilder.Entity("LostAndFoundBack.Models.Item", b =>
                 {
                     b.Property<int>("item_id")
                         .ValueGeneratedOnAdd()
@@ -96,48 +85,6 @@ namespace LostAndFoundBack.Migrations
                     b.HasKey("item_id");
 
                     b.ToTable("Items");
-                });
-
-            modelBuilder.Entity("LostAndFoundBack.DbModels.ReportedItem", b =>
-                {
-                    b.Property<int>("item_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("item_id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("item_id"));
-
-                    b.Property<int?>("Status")
-                        .HasColumnType("int")
-                        .HasColumnName("item_status");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("user_id");
-
-                    b.Property<string>("category")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("category");
-
-                    b.Property<DateTime>("date_found")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("date_found");
-
-                    b.Property<string>("description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("description");
-
-                    b.Property<string>("location_found")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("location_found");
-
-                    b.HasKey("item_id");
-
-                    b.ToTable("ReportedItems");
                 });
 
             modelBuilder.Entity("LostAndFoundBack.Models.User", b =>

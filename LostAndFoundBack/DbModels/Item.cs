@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LostAndFoundBack.Constants;
 
-namespace LostAndFoundBack.Models
+namespace LostAndFoundBack.DbModels
 {
     public class Item
     {
@@ -23,6 +24,8 @@ namespace LostAndFoundBack.Models
 
         [Column("photo_url")]
         public string photo_url { get; set; }
-        public ICollection<Claim> Claims { get; set; }
+
+        [Column("item_status")]
+        public ItemStatuses? Status { get; set; }
     }
 }
