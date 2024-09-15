@@ -17,12 +17,14 @@ namespace LostAndFoundBack.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        // Constructor to inject the ApplicationDbContext
         public ReportedItemsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         // GET: api/ReportedItems
+        // Retrieves all reported items
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReportedItem>>> GetReportedItems()
         {
@@ -30,6 +32,7 @@ namespace LostAndFoundBack.Controllers
         }
 
         // GET: api/ReportedItems/5
+        // Retrieves a specific reported item by its ID
         [HttpGet("{id}")]
         public async Task<ActionResult<ReportedItem>> GetReportedItem(int id)
         {
@@ -44,12 +47,14 @@ namespace LostAndFoundBack.Controllers
         }
 
         // POST: api/ReportedItems
+        // Creates a new reported item; requires authentication
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
         public async Task<ActionResult<ReportedItem>> CreateReportedItem(ReportedItem reportedItem)
         {
             if (ModelState.IsValid)
             {
+                // Assign the current user's ID to the reported item
                 reportedItem.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 reportedItem.Status = Constants.ReportedItemStatuses.New;
                 _context.Add(reportedItem);
@@ -60,6 +65,7 @@ namespace LostAndFoundBack.Controllers
         }
 
         // PUT: api/ReportedItems/5
+        // Updates a specific reported item by its ID
         [HttpPut("{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditReportedItem(int id, [Bind("item_id,UserId,description,date_found,location_found,category,Status")] ReportedItem reportedItem)
@@ -93,6 +99,7 @@ namespace LostAndFoundBack.Controllers
         }
 
         // DELETE: api/ReportedItems/5
+        // Deletes a specific reported item by its ID
         [HttpDelete("{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteReportedItem(int id)
@@ -109,6 +116,7 @@ namespace LostAndFoundBack.Controllers
             return NoContent();
         }
 
+        // Helper method to check if a reported item exists by its ID
         private bool ReportedItemExists(int id)
         {
             return _context.ReportedItems.Any(e => e.item_id == id);

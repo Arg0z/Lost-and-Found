@@ -23,6 +23,7 @@ namespace LostAndFoundBack.Controllers
         private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _context;
 
+        // Constructor to inject dependencies
         public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager, IConfiguration configuration, ApplicationDbContext context)
         {
             _userManager = userManager;
@@ -32,6 +33,8 @@ namespace LostAndFoundBack.Controllers
             _context = context;
         }
 
+        // POST: api/User/register
+        // Registers a new user
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterModel model)
         {
@@ -43,15 +46,18 @@ namespace LostAndFoundBack.Controllers
                     Email = model.Email
                 };
 
+                // Create the user with the provided password
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
+                    // Assign the "User" role to the new user
                     await _userManager.AddToRoleAsync(user, "User");
 
                     return Ok(new { UserId = user.Id, UserName = user.UserName, Email = user.Email });
                 }
 
+                // Add errors to the ModelState if creation failed
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -63,6 +69,8 @@ namespace LostAndFoundBack.Controllers
             return BadRequest(ModelState);
         }
 
+        // POST: api/User/login
+        // Logs in a user and returns a JWT token if credentials are valid
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginModel model)
         {
@@ -72,6 +80,7 @@ namespace LostAndFoundBack.Controllers
                 var result = await _signInManager.PasswordSignInAsync(user, model.Password, isPersistent: false, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    // Generate a JWT token for the authenticated user
                     var token = new JwtToken(_configuration).GenerateJwtToken(user);
                     return Ok(new { token });
                 }
@@ -79,6 +88,8 @@ namespace LostAndFoundBack.Controllers
             return Unauthorized();
         }
 
+        // POST: api/User/logout
+        // Logs out the current user
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
@@ -86,6 +97,8 @@ namespace LostAndFoundBack.Controllers
             return Ok(new { message = "Logged out successfully." });
         }
 
+        // GET: api/User/get-roles
+        // Retrieves the roles of the currently authenticated user
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("get-roles")]
         public async Task<IActionResult> GetUserRoles()
@@ -94,10 +107,13 @@ namespace LostAndFoundBack.Controllers
 
             var user = await _context.Users.FindAsync(userId);
 
+            // Get roles assigned to the user
             var roles = await _userManager.GetRolesAsync(user);
             return Ok(roles);
         }
 
+        // GET: api/User/user-information
+        // Retrieves the current user's information
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("user-information")]
         public async Task<IActionResult> GetCurrentUser()
@@ -106,9 +122,7 @@ namespace LostAndFoundBack.Controllers
 
             var user = await _context.Users.FindAsync(userId);
 
- 
-
-            return Ok(new { Id = userId, Name = user.UserName, Email = user.Email});
+            return Ok(new { Id = userId, Name = user.UserName, Email = user.Email });
         }
     }
 }

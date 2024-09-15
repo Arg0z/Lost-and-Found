@@ -19,6 +19,7 @@ namespace LostAndFoundBack.Controllers
         private readonly IItemRepository _itemRepository;
         private readonly ILogger<ItemsController> _logger;
 
+        // Constructor to inject dependencies
         public ItemsController(ApplicationDbContext context, IItemRepository itemRepository, ILogger<ItemsController> logger)
         {
             _context = context;
@@ -27,6 +28,7 @@ namespace LostAndFoundBack.Controllers
         }
 
         // GET: api/Items
+        // Retrieves all items from the repository
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Item>>> GetItems()
         {
@@ -43,6 +45,7 @@ namespace LostAndFoundBack.Controllers
         }
 
         // GET: api/Items/5
+        // Retrieves a specific item by its ID from the database
         [HttpGet("{id}")]
         public async Task<ActionResult<Item>> GetItem(int id)
         {
@@ -63,6 +66,7 @@ namespace LostAndFoundBack.Controllers
         }
 
         // POST: api/Items
+        // Creates a new item and sets its status to Unclaimed
         [HttpPost]
         public async Task<ActionResult<Item>> PostItem(Item item)
         {
@@ -81,6 +85,7 @@ namespace LostAndFoundBack.Controllers
         }
 
         // PUT: api/Items/5
+        // Updates a specific item by its ID
         [HttpPut("{id}")]
         public async Task<IActionResult> PutItem(int id, Item item)
         {
@@ -117,6 +122,7 @@ namespace LostAndFoundBack.Controllers
         }
 
         // DELETE: api/Items/5
+        // Deletes a specific item by its ID
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItem(int id)
         {
@@ -141,6 +147,7 @@ namespace LostAndFoundBack.Controllers
         }
 
         // GET: api/Items/location/{location}
+        // Retrieves items found at a specific location
         [HttpGet("location/{location}")]
         public async Task<ActionResult<IEnumerable<Item>>> GetItemsByLocation(string location)
         {
@@ -164,6 +171,7 @@ namespace LostAndFoundBack.Controllers
         }
 
         // GET: api/Items/location/{location}/category/{categoryName}
+        // Retrieves items found at a specific location and category
         [HttpGet("location/{location}/category/{categoryName}")]
         public async Task<ActionResult<IEnumerable<Item>>> GetItemsByLocationAndCategory(string location, string categoryName)
         {
@@ -188,6 +196,7 @@ namespace LostAndFoundBack.Controllers
         }
 
         // GET: api/Items/categories/json
+        // Retrieves a JSON list of categories with their counts
         [HttpGet("categories/json")]
         public async Task<IActionResult> GetCategoriesWithCountsAsJson()
         {
@@ -212,6 +221,7 @@ namespace LostAndFoundBack.Controllers
         }
 
         // GET: api/Items/location/{location}/count-by-category
+        // Retrieves item counts by category for a specific location
         [HttpGet("location/{location}/count-by-category")]
         public async Task<ActionResult<IEnumerable<CategoryCountDto>>> GetItemsCountByCategory(string location)
         {
@@ -242,6 +252,7 @@ namespace LostAndFoundBack.Controllers
         }
 
         // GET: api/Items/category/{categoryName}
+        // Retrieves the count of items for a specific category
         [HttpGet("category/{categoryName}")]
         public async Task<IActionResult> GetItemCountByCategory(string categoryName)
         {
@@ -261,57 +272,4 @@ namespace LostAndFoundBack.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while getting item count by category.");
-                return StatusCode(500, "Internal server error");
-            }
-        }
-
-        [HttpGet("Statuses")]
-        public async Task<IActionResult> GetItemStatuses()
-        {
-            return Ok(Enum.GetNames(typeof(ItemStatuses)));
-        }
-
-        private bool ItemExists(int id)
-        {
-            return _context.Items.Any(e => e.item_id == id);
-        }
-
-        [HttpGet("Filters")]
-        public async Task<ActionResult<IEnumerable<Item>>> GetItems(
-            [FromQuery] string? location,
-            [FromQuery] string? category,
-            [FromQuery] DateTime? date,
-            [FromQuery] ItemStatuses? status)
-        {
-            var itemsQuery = _context.Items.AsQueryable();
-
-            if (!string.IsNullOrEmpty(location))
-            {
-                itemsQuery = itemsQuery.Where(i => i.location_found == location);
-            }
-
-            if (!string.IsNullOrEmpty(category))
-            {
-                itemsQuery = itemsQuery.Where(i => i.category == category);
-            }
-
-            if (date.HasValue)
-            {
-                itemsQuery = itemsQuery.Where(i => i.date_found.Date == date.Value.Date);
-            }
-
-            if (status.HasValue)
-            {
-                itemsQuery = itemsQuery.Where(i => i.Status == status);
-            }
-
-            return await itemsQuery.ToListAsync();
-        }
-    }
-
-    public class CategoryCountDto
-    {
-        public string Category { get; set; }
-        public int Count { get; set; }
-    }
-}
+                return StatusCode(
