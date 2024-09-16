@@ -22,15 +22,18 @@ namespace LostAndFoundBack.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _context;
+        private readonly EmailService _emailService;
 
         // Constructor to inject dependencies
-        public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager, IConfiguration configuration, ApplicationDbContext context)
+        public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager, IConfiguration configuration, ApplicationDbContext context, EmailService emailService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _context = context;
+            _emailService = emailService;
+
         }
 
         // POST: api/User/register
@@ -53,7 +56,12 @@ namespace LostAndFoundBack.Controllers
                 {
                     // Assign the "User" role to the new user
                     await _userManager.AddToRoleAsync(user, "User");
-
+                    if (!string.IsNullOrEmpty(model.Email))
+                    {
+                        var subject = "Claim Submission Confirmation";
+                        var message = "Your claim has been successfully submitted.";
+                        await _emailService.SendEmailAsync(model.Email, subject, message);
+                    }
                     return Ok(new { UserId = user.Id, UserName = user.UserName, Email = user.Email });
                 }
 
